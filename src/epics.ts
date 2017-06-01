@@ -32,11 +32,11 @@ const apiRequest = (action$: any, action: APIRequestAction) => {
     const {
         apiRequest: {
             uri,
-        method,
-        params,
-        body,
-        headers,
-                        },
+            method,
+            params,
+            body,
+            headers,
+        },
         actionTypes,
         key,
         args,
