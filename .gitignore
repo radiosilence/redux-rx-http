@@ -1,0 +1,24 @@
+# Dependency installation dirs
+/node_modules
+/typings
+
+# Build artifacts
+/bundle
+/dist
+
+# Application Options to keep from repository
+/app.options.js
+
+# OS and IDE FILES
+*.DS_Store
+/*.iml
+/.idea
+/.vscode
+
+# npm/yarn debug logs
+/npm-debug.log
+object
+/yarn-error.log
+
+# Test artifacts
+/coverage

@@ -1,0 +1,22 @@
+{
+  "name": "react-observable-http",
+  "version": "0.0.1",
+  "description": "Uses react-observable to provide a nice HTTP thing.",
+  "main": "./src/index.js",
+  "repository": "git@github.com:radiosilence/react-observable-http.git",
+  "author": "James Cleveland",
+  "license": "MIT",
+  "devDependencies": {
+    "tslint": "^5.3.2",
+    "tslint-config-airbnb": "^5.0.1",
+    "tslint-react": "^3.0.0",
+    "tsutils": "^2.1.0",
+    "typescript": "^2.3.3",
+    "typescript-formatter": "^5.2.0"
+  },
+  "dependencies": {
+    "redux": "^3.6.0",
+    "redux-observable": "^0.14.1",
+    "rxjs": "^5.4.0"
+  }
+}
