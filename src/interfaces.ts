@@ -5,6 +5,19 @@ export interface RxHttpConfig {
     baseUrl?: string
 }
 
+export interface RxHttpSuccess {
+    type: '@@rx-http/SUCCESS'
+    response: any
+    key?: string
+    args?: any
+}
+
+export interface RxHttpError {
+    type: '@@rx-http/ERROR'
+    error: Error | string
+    args?: object
+}
+
 export interface RxHttpActionTypes {
     REQUEST: symbol | string
     SUCCESS: symbol | string

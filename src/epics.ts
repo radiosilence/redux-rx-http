@@ -13,6 +13,8 @@ import {
     RxHttpRequestAction,
     RxHttpActionTypes,
     RxHttpRequest,
+    RxHttpSuccess,
+    RxHttpError,
 } from './interfaces'
 
 import { RX_HTTP_REQUEST_INTERNAL, RX_HTTP_SUCCESS, RX_HTTP_ERROR } from './actions'
@@ -59,7 +61,7 @@ const httpSuccess = ({ response }: AjaxResponse,
 
 const httpGlobalSuccess = ({ response }: AjaxResponse,
                            key: string | undefined,
-                           args: object | undefined) => ({
+                           args: object | undefined): RxHttpSuccess => ({
         type: RX_HTTP_SUCCESS,
         key,
         response,
@@ -74,7 +76,7 @@ const httpError = (error: any, args: object | undefined,
         args,
     })
 
-const httpGlobalError = (error: any, args: object | undefined) => ({
+const httpGlobalError = (error: any, args: object | undefined): RxHttpError => ({
     type: RX_HTTP_ERROR,
     args,
     error,
