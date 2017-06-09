@@ -11,18 +11,18 @@ import { Observable, AjaxResponse } from 'rxjs'
 
 import {
     Action,
-    RxApiRequestAction,
-    RxApiActionTypes,
-    RxApiRequest,
-    RxApiResponse,
-    RxApiResponseAction,
+    RxHttpRequestAction,
+    RxHttpActionTypes,
+    RxHttpRequest,
+    RxHttpResponse,
+    RxHttpResponseAction,
 } from './interfaces'
 
-import { RX_API_REQUEST_CONFIGURED, RX_API_SUCCESS, RX_API_ERROR } from './actions'
+import { RX_HTTP_REQUEST_INTERNAL, RX_HTTP_SUCCESS, RX_HTTP_ERROR } from './actions'
 
-const apiRequest = (action$: any, action: RxApiRequestAction) => {
+const httpRequest = (action$: any, action: RxHttpRequestAction) => {
     const {
-        apiRequest: {
+        request: {
             url,
             method,
             params,
@@ -41,58 +41,58 @@ const apiRequest = (action$: any, action: RxApiRequestAction) => {
         body,
     })
         .mergeMap((response: AjaxResponse) => [
-            apiGlobalSuccess(response, key, args),
-            apiSuccess(response, key, args, actionTypes),
+            httpGlobalSuccess(response, key, args),
+            httpSuccess(response, key, args, actionTypes),
         ])
         .takeUntil(action$.ofType(actionTypes.CANCEL))
         .catch((error: any) => [
-            apiGlobalError(error, args),
-            apiError(error, args, actionTypes),
+            httpGlobalError(error, args),
+            httpError(error, args, actionTypes),
         ])
 }
 
-const apiSuccess = ({ response }: AjaxResponse,
-                    key: string | undefined,
-                    args: object | undefined,
-                    actionTypes: RxApiActionTypes) => ({
+const httpSuccess = ({ response }: AjaxResponse,
+                     key: string | undefined,
+                     args: object | undefined,
+                     actionTypes: RxHttpActionTypes) => ({
         type: actionTypes.SUCCESS,
         result: key ? response[key] : response,
         args,
     })
 
-const apiGlobalSuccess = ({ response }: AjaxResponse,
-                          key: string | undefined,
-                          args: object | undefined) => ({
-        type: RX_API_SUCCESS,
+const httpGlobalSuccess = ({ response }: AjaxResponse,
+                           key: string | undefined,
+                           args: object | undefined) => ({
+        type: RX_HTTP_SUCCESS,
         key,
         response,
         args,
     })
 
-const apiError = (error: any, args: object | undefined,
-                  actionTypes: RxApiActionTypes) => ({
+const httpError = (error: any, args: object | undefined,
+                   actionTypes: RxHttpActionTypes) => ({
         type: actionTypes.ERROR,
         payload: error.xhr.response,
         error: true,
         args,
     })
 
-const apiGlobalError = (error: any, args: object | undefined) => ({
-    type: RX_API_ERROR,
+const httpGlobalError = (error: any, args: object | undefined) => ({
+    type: RX_HTTP_ERROR,
     args,
     error,
 })
 
-const apiRequestEpic = (action$: ActionsObservable<RxApiRequestAction>) =>
-    action$.ofType(RX_API_REQUEST_CONFIGURED)
-        .mergeMap(action => apiRequest(action$, action))
+const httpRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>) =>
+    action$.ofType(RX_HTTP_REQUEST_INTERNAL)
+        .mergeMap(action => httpRequest(action$, action))
 
-const startRequestEpic = (action$: ActionsObservable<RxApiRequestAction>):
+const startRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>):
     Observable<Action> =>
-    action$.ofType(RX_API_REQUEST_CONFIGURED)
-        .map(({ actionTypes }: RxApiRequestAction) => ({ type: actionTypes.REQUEST }))
+    action$.ofType(RX_HTTP_REQUEST_INTERNAL)
+        .map(({ actionTypes }: RxHttpRequestAction) => ({ type: actionTypes.REQUEST }))
 
-export const rxApiEpic = combineEpics(
-    apiRequestEpic,
+export const rxHttpEpic = combineEpics(
+    httpRequestEpic,
     startRequestEpic,
 )

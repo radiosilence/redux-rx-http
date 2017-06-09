@@ -1,4 +1,4 @@
-export const RX_API_REQUEST = '@@redux-rx-api/API_REQUEST'
-export const RX_API_REQUEST_CONFIGURED = '@@redux-rx-api/API_REQUEST_CONFIGURED'
-export const RX_API_SUCCESS = '@@redux-rx-api/API_SUCCESS'
-export const RX_API_ERROR = '@@redux-rx-api/API_ERROR'
+export const RX_HTTP_REQUEST = '@@redux-rx-http/HTTP_REQUEST'
+export const RX_HTTP_REQUEST_INTERNAL = '@@redux-rx-http/HTTP_REQUEST_INTERNAL'
+export const RX_HTTP_SUCCESS = '@@redux-rx-http/HTTP_SUCCESS'
+export const RX_HTTP_ERROR = '@@redux-rx-http/HTTP_ERROR'

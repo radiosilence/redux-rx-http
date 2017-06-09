@@ -1,6 +1,6 @@
 import { AjaxResponse } from 'rxjs'
 
-export interface RxApiConfig {
+export interface RxHttpConfig {
     headers?: object
     baseUrl?: string
 }
@@ -21,7 +21,7 @@ export interface Alert extends Action {
     message: string
 }
 
-export interface RxApiActionTypes {
+export interface RxHttpActionTypes {
     REQUEST: symbol | string
     SUCCESS: symbol | string
     ERROR: symbol | string
@@ -32,14 +32,14 @@ export interface QueryParams {
     [key: string]: any
 }
 
-export interface RxApiRequestAction extends Action {
-    actionTypes: RxApiActionTypes
-    apiRequest: RxApiRequest
+export interface RxHttpRequestAction extends Action {
+    actionTypes: RxHttpActionTypes
+    request: RxHttpRequest
     key?: string
     args?: {}
 }
 
-export interface RxApiRequest {
+export interface RxHttpRequest {
     method: string
     url: string
     params?: QueryParams
@@ -47,13 +47,13 @@ export interface RxApiRequest {
     headers?: object
 }
 
-export interface RxApiResponse extends Action {
+export interface RxHttpResponse extends Action {
     result: object
     args?: object
 }
 
-export interface RxApiResponseAction extends Action {
-    actionTypes: RxApiActionTypes
+export interface RxHttpResponseAction extends Action {
+    actionTypes: RxHttpActionTypes
     response: AjaxResponse
     key?: string
     error?: object

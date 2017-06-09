@@ -1,7 +1,7 @@
-redux-rx-api
-============
+redux-rx-http
+=============
 
 Basically this is a middleware and epic that handles a nice, fully one-directional way of managing
-an API request with redux-observable.
+a HTTP request with redux-observable.
 
 *more readme to follow after lunch*

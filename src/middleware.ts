@@ -1,21 +1,21 @@
 import { Dispatch } from 'redux'
-import { RxApiConfig, RxApiRequestAction, Action } from './interfaces'
-import { RX_API_REQUEST, RX_API_REQUEST_CONFIGURED } from './actions'
+import { RxHttpConfig, RxHttpRequestAction, Action } from './interfaces'
+import { RX_HTTP_REQUEST, RX_HTTP_REQUEST_INTERNAL } from './actions'
 
-const configured = (config: RxApiConfig, action: RxApiRequestAction): RxApiRequestAction => ({
+const configured = (config: RxHttpConfig, action: RxHttpRequestAction): RxHttpRequestAction => ({
     ...action,
-    type: RX_API_REQUEST_CONFIGURED,
-    apiRequest: {
-        ...action.apiRequest,
-        url: `${config.baseUrl}${action.apiRequest.url}`,
+    type: RX_HTTP_REQUEST_INTERNAL,
+    request: {
+        ...action.request,
+        url: `${config.baseUrl}${action.request.url}`,
         headers: {
             ...config.headers,
-            ...action.apiRequest.headers,
+            ...action.request.headers,
         },
     },
 })
 
-export const createRxApiMiddleware = (config: RxApiConfig) =>
-    (store: any) => (next: any) => (action: any) => action.type === RX_API_REQUEST
+export const createRxHttpMiddleware = (config: RxHttpConfig) =>
+    (store: any) => (next: any) => (action: any) => action.type === RX_HTTP_REQUEST
         ? next(configured(config, action))
         : next(action)
