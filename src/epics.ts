@@ -16,7 +16,7 @@ import {
     RxApiRequest,
     RxApiResponse,
     RxApiResponseAction,
-} from 'interfaces'
+} from './interfaces'
 
 import { API_REQUEST_CONFIGURED, API_SUCCESS, API_ERROR } from './actions'
 
