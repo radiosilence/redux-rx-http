@@ -28,21 +28,9 @@ export interface RxApiRequestActionTypes {
     CANCEL: symbol | string
 }
 
-export interface HTTPMethods {
-    GET: 'GET'
-    POST: 'POST'
-    PUT: 'PUT'
-    DELETE: 'DELETE'
-    PATCH: 'PATCH'
-    OPTIONS: 'OPTIONS'
-    HEAD: 'HEAD'
-}
-
 export interface QueryParams {
     [key: string]: any
 }
-
-export type HTTPMethod = keyof HTTPMethods
 
 export interface RxApiRequestAction extends Action {
     actionTypes: RxApiRequestActionTypes
@@ -52,7 +40,7 @@ export interface RxApiRequestAction extends Action {
 }
 
 export interface RxApiRequest {
-    method: HTTPMethod
+    method: string
     url: string
     params?: QueryParams
     body?: object

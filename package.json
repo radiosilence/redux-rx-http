@@ -1,6 +1,6 @@
 {
   "name": "redux-rx-api",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Uses react-observable to provide a nice way of talking to an API.",
   "main": "index.js",
   "repository": "git@github.com:radiosilence/react-observable-http.git",
