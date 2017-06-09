@@ -18,7 +18,7 @@ import {
     RxApiResponseAction,
 } from './interfaces'
 
-import { API_REQUEST_CONFIGURED, API_SUCCESS, API_ERROR } from './actions'
+import { RX_API_REQUEST_CONFIGURED, RX_API_SUCCESS, RX_API_ERROR } from './actions'
 
 const apiRequest = (action$: any, action: RxApiRequestAction) => {
     const {
@@ -63,7 +63,7 @@ const apiSuccess = ({ response }: AjaxResponse,
 const apiGlobalSuccess = ({ response }: AjaxResponse,
                           key: string | undefined,
                           args: object | undefined) => ({
-        type: API_SUCCESS,
+        type: RX_API_SUCCESS,
         key,
         response,
         args,
@@ -78,18 +78,18 @@ const apiError = (error: any, args: object | undefined,
     })
 
 const apiGlobalError = (error: any, args: object | undefined) => ({
-    type: API_ERROR,
+    type: RX_API_ERROR,
     args,
     error,
 })
 
 const apiRequestEpic = (action$: ActionsObservable<RxApiRequestAction>) =>
-    action$.ofType(API_REQUEST_CONFIGURED)
+    action$.ofType(RX_API_REQUEST_CONFIGURED)
         .mergeMap(action => apiRequest(action$, action))
 
 const startRequestEpic = (action$: ActionsObservable<RxApiRequestAction>):
     Observable<Action> =>
-    action$.ofType(API_REQUEST_CONFIGURED)
+    action$.ofType(RX_API_REQUEST_CONFIGURED)
         .map(({ actionTypes }: RxApiRequestAction) => ({ type: actionTypes.REQUEST }))
 
 export const rxApiEpic = combineEpics(
