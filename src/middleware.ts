@@ -1,7 +1,7 @@
-import { APIConfig, APIRequestAction, Action } from './interfaces'
+import { RxAPIConfig, RxAPIRequestAction, Action } from './interfaces'
 import { API_REQUEST, API_REQUEST_CONFIGURED } from './actions'
 
-const configured = (config: APIConfig, action: APIRequestAction): APIRequestAction => ({
+const configured = (config: RxAPIConfig, action: RxAPIRequestAction): RxAPIRequestAction => ({
     ...action,
     type: API_REQUEST_CONFIGURED,
     apiRequest: {
@@ -14,8 +14,8 @@ const configured = (config: APIConfig, action: APIRequestAction): APIRequestActi
     },
 })
 
-export const createRxAPIMiddleware = (config: APIConfig) =>
+export const createRxAPIMiddleware = (config: RxAPIConfig) =>
     (store: any) => (next: (a: Action) => any) =>
-        (action: APIRequestAction) => action.type === API_REQUEST
+        (action: RxAPIRequestAction) => action.type === API_REQUEST
             ? configured(config, action)
             : next(action)
