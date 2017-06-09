@@ -18,7 +18,7 @@ import {
     APIResponseAction,
 } from 'interfaces'
 
-import { API_REQUEST, API_SUCCESS, API_ERROR } from 'actions'
+import { API_REQUEST_CONFIGURED, API_SUCCESS, API_ERROR } from './actions'
 
 const API_BASE = ''
 const API_KEY = ''
@@ -31,7 +31,7 @@ const BASE_HEADERS = {
 const apiRequest = (action$: any, action: APIRequestAction) => {
     const {
         apiRequest: {
-            uri,
+            url,
             method,
             params,
             body,
@@ -43,7 +43,7 @@ const apiRequest = (action$: any, action: APIRequestAction) => {
     } = action
 
     return ajax({
-        url: `${API_BASE}${uri}`,
+        url,
         headers: {
             ...BASE_HEADERS,
             ...headers,
@@ -95,12 +95,12 @@ const apiGlobalError = (error: any, args: object | undefined) => ({
 })
 
 const apiRequestEpic = (action$: ActionsObservable<APIRequestAction>) =>
-    action$.ofType(API_REQUEST)
+    action$.ofType(API_REQUEST_CONFIGURED)
         .mergeMap(action => apiRequest(action$, action))
 
 const startRequestEpic = (action$: ActionsObservable<APIRequestAction>):
     Observable<Action> =>
-    action$.ofType(API_REQUEST)
+    action$.ofType(API_REQUEST_CONFIGURED)
         .map(({ actionTypes }: APIRequestAction) => ({ type: actionTypes.REQUEST }))
 
 export default combineEpics(

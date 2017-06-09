@@ -1,7 +1,7 @@
 {
-  "name": "react-observable-http",
+  "name": "react-rx-api",
   "version": "0.0.1",
-  "description": "Uses react-observable to provide a nice HTTP thing.",
+  "description": "Uses react-observable to provide a nice way of talking to an API.",
   "main": "./src/index.js",
   "repository": "git@github.com:radiosilence/react-observable-http.git",
   "author": "James Cleveland",
@@ -12,11 +12,29 @@
     "tslint-react": "^3.0.0",
     "tsutils": "^2.1.0",
     "typescript": "^2.3.3",
-    "typescript-formatter": "^5.2.0"
+    "typescript-formatter": "^5.2.0",
+    "webpack": "^2.6.1",
+    "webpack-merge": "^4.1.0"
   },
   "dependencies": {
+    "@types/jest": "^19.2.4",
+    "@types/node": "^7.0.29",
     "redux": "^3.6.0",
     "redux-observable": "^0.14.1",
     "rxjs": "^5.4.0"
+  },
+  "scripts": {
+    "copy-assets": "mkdir -p dist; cp app.options.js dist",
+    "dev:build": "webpack -w",
+    "dev:serve": "lite-server -c server.config.json",
+    "start": "npm run tsfmt:replace && npm run dev:build",
+    "production:build": "npm run tsc:compile && NODE_ENV=production npm run webpack:build",
+    "tsc:compile": "tsc",
+    "tsc:watch": "tsc --watch --pretty",
+    "tsfmt:verify": "tsfmt --verify",
+    "webpack:watch": "webpack -w",
+    "webpack:build": "webpack",
+    "lint": "tslint ./src/**/*.{ts,tsx}",
+    "lint:fix": "tslint --fix ./src/**/*.{ts,tsx}"
   }
 }
