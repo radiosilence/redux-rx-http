@@ -11,24 +11,16 @@ import { Observable, AjaxResponse } from 'rxjs'
 
 import {
     Action,
-    RxAPIRequestAction,
-    RxAPIRequestActionTypes,
-    RxAPIRequest,
-    RxAPIResponse,
-    RxAPIResponseAction,
+    RxApiRequestAction,
+    RxApiRequestActionTypes,
+    RxApiRequest,
+    RxApiResponse,
+    RxApiResponseAction,
 } from 'interfaces'
 
 import { API_REQUEST_CONFIGURED, API_SUCCESS, API_ERROR } from './actions'
 
-const API_BASE = ''
-const API_KEY = ''
-
-const BASE_HEADERS = {
-    'Content-Type': 'application/json',
-    'Authorisation': API_KEY,
-}
-
-const apiRequest = (action$: any, action: RxAPIRequestAction) => {
+const apiRequest = (action$: any, action: RxApiRequestAction) => {
     const {
         apiRequest: {
             url,
@@ -65,7 +57,7 @@ const apiRequest = (action$: any, action: RxAPIRequestAction) => {
 const apiSuccess = ({ response }: AjaxResponse,
                     key: string | undefined,
                     args: object | undefined,
-                    actionTypes: RxAPIRequestActionTypes) => ({
+                    actionTypes: RxApiRequestActionTypes) => ({
         type: actionTypes.SUCCESS,
         result: key ? response[key] : response,
         args,
@@ -81,7 +73,7 @@ const apiGlobalSuccess = ({ response }: AjaxResponse,
     })
 
 const apiError = (error: any, args: object | undefined,
-                  actionTypes: RxAPIRequestActionTypes) => ({
+                  actionTypes: RxApiRequestActionTypes) => ({
         type: actionTypes.ERROR,
         payload: error.xhr.response,
         error: true,
@@ -94,14 +86,14 @@ const apiGlobalError = (error: any, args: object | undefined) => ({
     error,
 })
 
-const apiRequestEpic = (action$: ActionsObservable<RxAPIRequestAction>) =>
+const apiRequestEpic = (action$: ActionsObservable<RxApiRequestAction>) =>
     action$.ofType(API_REQUEST_CONFIGURED)
         .mergeMap(action => apiRequest(action$, action))
 
-const startRequestEpic = (action$: ActionsObservable<RxAPIRequestAction>):
+const startRequestEpic = (action$: ActionsObservable<RxApiRequestAction>):
     Observable<Action> =>
     action$.ofType(API_REQUEST_CONFIGURED)
-        .map(({ actionTypes }: RxAPIRequestAction) => ({ type: actionTypes.REQUEST }))
+        .map(({ actionTypes }: RxApiRequestAction) => ({ type: actionTypes.REQUEST }))
 
 export const rxApiEpic = combineEpics(
     apiRequestEpic,
