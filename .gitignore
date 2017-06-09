@@ -17,7 +17,6 @@
 
 # npm/yarn debug logs
 /npm-debug.log
-object
 /yarn-error.log
 
 # Test artifacts

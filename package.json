@@ -7,6 +7,7 @@
   "author": "James Cleveland",
   "license": "MIT",
   "devDependencies": {
+    "source-map-loader": "^0.2.1",
     "tslint": "^5.3.2",
     "tslint-config-airbnb": "^5.0.1",
     "tslint-react": "^3.0.0",
