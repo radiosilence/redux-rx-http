@@ -17,5 +17,5 @@ const configured = (config: RxApiConfig, action: RxApiRequestAction): RxApiReque
 
 export const createRxApiMiddleware = (config: RxApiConfig) =>
     (store: any) => (next: any) => (action: any) => action.type === RX_API_REQUEST
-        ? configured(config, action)
+        ? next(configured(config, action))
         : next(action)
