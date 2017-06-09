@@ -14,7 +14,7 @@ const configured = (config: APIConfig, action: APIRequestAction): APIRequestActi
     },
 })
 
-export const createAPIMiddleware = (config: APIConfig) =>
+export const createRxAPIMiddleware = (config: APIConfig) =>
     (store: any) => (next: (a: Action) => any) =>
         (action: APIRequestAction) => action.type === API_REQUEST
             ? configured(config, action)
