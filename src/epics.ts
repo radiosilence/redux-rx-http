@@ -36,10 +36,7 @@ const apiRequest = (action$: any, action: RxApiRequestAction) => {
 
     return ajax({
         url,
-        headers: {
-            ...BASE_HEADERS,
-            ...headers,
-        },
+        headers,
         method: (method as string),
         body,
     })
