@@ -45,7 +45,6 @@ export interface QueryParams {
 export type HTTPMethod = keyof HTTPMethods
 
 export interface RxApiRequestAction extends Action {
-    type: '@@redux-rx-api/API_REQUEST' | '@@redux-rx-api/API_REQUEST_CONFIGURED'
     actionTypes: RxApiRequestActionTypes
     apiRequest: RxApiRequest
     key?: string
