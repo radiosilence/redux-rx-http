@@ -10,12 +10,9 @@ import { ActionsObservable, combineEpics } from 'redux-observable'
 import { Observable, AjaxResponse } from 'rxjs'
 
 import {
-    Action,
     RxHttpRequestAction,
     RxHttpActionTypes,
     RxHttpRequest,
-    RxHttpResponse,
-    RxHttpResponseAction,
 } from './interfaces'
 
 import { RX_HTTP_REQUEST_INTERNAL, RX_HTTP_SUCCESS, RX_HTTP_ERROR } from './actions'
@@ -88,7 +85,7 @@ const httpRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>) =>
         .mergeMap(action => httpRequest(action$, action))
 
 const startRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>):
-    Observable<Action> =>
+    Observable<any> =>
     action$.ofType(RX_HTTP_REQUEST_INTERNAL)
         .map(({ actionTypes }: RxHttpRequestAction) => ({ type: actionTypes.REQUEST }))
 

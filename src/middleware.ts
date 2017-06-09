@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-import { RxHttpConfig, RxHttpRequestAction, Action } from './interfaces'
+import { RxHttpConfig, RxHttpRequestAction } from './interfaces'
 import { RX_HTTP_REQUEST, RX_HTTP_REQUEST_INTERNAL } from './actions'
 
 const configured = (config: RxHttpConfig, action: RxHttpRequestAction): RxHttpRequestAction => ({
