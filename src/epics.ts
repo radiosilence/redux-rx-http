@@ -12,7 +12,7 @@ import { Observable, AjaxResponse } from 'rxjs'
 import {
     Action,
     RxApiRequestAction,
-    RxApiRequestActionTypes,
+    RxApiActionTypes,
     RxApiRequest,
     RxApiResponse,
     RxApiResponseAction,
@@ -54,7 +54,7 @@ const apiRequest = (action$: any, action: RxApiRequestAction) => {
 const apiSuccess = ({ response }: AjaxResponse,
                     key: string | undefined,
                     args: object | undefined,
-                    actionTypes: RxApiRequestActionTypes) => ({
+                    actionTypes: RxApiActionTypes) => ({
         type: actionTypes.SUCCESS,
         result: key ? response[key] : response,
         args,
@@ -70,7 +70,7 @@ const apiGlobalSuccess = ({ response }: AjaxResponse,
     })
 
 const apiError = (error: any, args: object | undefined,
-                  actionTypes: RxApiRequestActionTypes) => ({
+                  actionTypes: RxApiActionTypes) => ({
         type: actionTypes.ERROR,
         payload: error.xhr.response,
         error: true,

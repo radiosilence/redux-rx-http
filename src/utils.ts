@@ -1,6 +1,6 @@
-import { RxApiRequestActionTypes } from './interfaces'
+import { RxApiActionTypes } from './interfaces'
 
-export const createRxApiRequestTypes = (base: string): RxApiRequestActionTypes => ({
+export const createRxApiActionTypes = (base: string): RxApiActionTypes => ({
     ERROR: `${base}_ERROR`,
     REQUEST: `${base}_REQUEST`,
     SUCCESS: `${base}_SUCCESS`,

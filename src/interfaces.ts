@@ -21,7 +21,7 @@ export interface Alert extends Action {
     message: string
 }
 
-export interface RxApiRequestActionTypes {
+export interface RxApiActionTypes {
     REQUEST: symbol | string
     SUCCESS: symbol | string
     ERROR: symbol | string
@@ -33,7 +33,7 @@ export interface QueryParams {
 }
 
 export interface RxApiRequestAction extends Action {
-    actionTypes: RxApiRequestActionTypes
+    actionTypes: RxApiActionTypes
     apiRequest: RxApiRequest
     key?: string
     args?: {}
@@ -53,7 +53,7 @@ export interface RxApiResponse extends Action {
 }
 
 export interface RxApiResponseAction extends Action {
-    actionTypes: RxApiRequestActionTypes
+    actionTypes: RxApiActionTypes
     response: AjaxResponse
     key?: string
     error?: object
