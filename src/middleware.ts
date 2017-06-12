@@ -15,7 +15,7 @@ const configured = (config: RxHttpConfig, action: RxHttpRequestAction): RxHttpRe
     },
 })
 
-export const createRxHttpMiddleware = (config: RxHttpConfig) =>
+export const createRxHttpMiddleware = (config: (store: any) => RxHttpConfig) =>
     (store: any) => (next: any) => (action: any) => action.type === RX_HTTP_REQUEST
-        ? next(configured(config, action))
+        ? next(configured(config(store), action))
         : next(action)
