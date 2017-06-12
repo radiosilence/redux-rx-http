@@ -37,10 +37,13 @@ export interface RxHttpRequestAction {
     args?: {}
 }
 
-export interface RxHttpRequest {
-    method: string
+export interface RxHttpRequestBase {
+    params ?: QueryParams
+    body ?: object
+    headers ?: object
+}
+
+export interface RxHttpRequest extends RxHttpRequestBase {
     url: string
-    params?: QueryParams
-    body?: object
-    headers?: object
+    method: string,
 }
