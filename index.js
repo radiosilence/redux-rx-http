@@ -9,5 +9,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./dist/actions"));
 __export(require("./dist/epics"));
 __export(require("./dist/interfaces"));
-__export(require("./dist/middleware"));
 __export(require("./dist/utils"));

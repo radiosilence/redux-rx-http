@@ -15,9 +15,23 @@ import {
     RxHttpRequest,
     RxHttpSuccess,
     RxHttpError,
+    RxHttpConfig,
 } from './interfaces'
 
-import { RX_HTTP_REQUEST_INTERNAL, RX_HTTP_SUCCESS, RX_HTTP_ERROR } from './actions'
+import { RX_HTTP_REQUEST, RX_HTTP_SUCCESS, RX_HTTP_ERROR } from './actions'
+
+const configured = (config: RxHttpConfig, action: RxHttpRequestAction): RxHttpRequestAction => ({
+    ...action,
+    type: RX_HTTP_REQUEST,
+    request: {
+        ...action.request,
+        url: `${config.baseUrl}${action.request.url}`,
+        headers: {
+            ...config.headers,
+            ...action.request.headers,
+        },
+    },
+})
 
 const httpRequest = (action$: any, action: RxHttpRequestAction) => {
     const {
@@ -82,16 +96,17 @@ const httpGlobalError = (error: any, args: object | undefined): RxHttpError => (
     error,
 })
 
-const httpRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>) =>
-    action$.ofType(RX_HTTP_REQUEST_INTERNAL)
-        .mergeMap(action => httpRequest(action$, action))
+export const createRxHttpEpics = (config: (store: any) => RxHttpConfig) => {
+    const httpRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>) =>
+        action$.ofType(RX_HTTP_REQUEST)
+            .mergeMap(action => httpRequest(action$, configured(config, action)))
 
-const startRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>):
-    Observable<any> =>
-    action$.ofType(RX_HTTP_REQUEST_INTERNAL)
-        .map(({ actionTypes }: RxHttpRequestAction) => ({ type: actionTypes.REQUEST }))
+    const startRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>): Observable<any> =>
+        action$.ofType(RX_HTTP_REQUEST)
+            .map(({ actionTypes }: RxHttpRequestAction) => ({ type: actionTypes.REQUEST }))
 
-export const rxHttpEpic = combineEpics(
-    httpRequestEpic,
-    startRequestEpic,
-)
+    return combineEpics(
+        httpRequestEpic,
+        startRequestEpic,
+    )
+}
