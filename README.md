@@ -132,8 +132,8 @@ export const fetchPotatosForField = (fieldId: string,
   })
 
 
-export const savePotato (id: string, potato: Potato): RxHttpRequestAction =>
-  rxHttpPut(`/potato/${id}`, SAVE_POTATO, potato, { args: { id } })
+export const savePotato (potato: Potato): RxHttpRequestAction =>
+  rxHttpPut(`/potato/${potato.id}`, SAVE_POTATO, potato, { args: { id } })
 ```
 
 
