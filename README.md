@@ -107,7 +107,7 @@ And a final argument which is of type `RxHttpRequestConfig`.
 
 ```typescript
 export interface RxHttpRequestConfig {
-  // Represents the request being sent
+  // Represents data about the request to be sent
   request?: RxHttpRequestBase
 
   // An arbitrary object that you can pass additional metadata in order to provide context to
