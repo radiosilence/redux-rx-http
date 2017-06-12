@@ -97,9 +97,10 @@ const httpGlobalError = (error: any, args: object | undefined): RxHttpError => (
 })
 
 export const createRxHttpEpics = (config: (store: any) => RxHttpConfig) => {
-    const httpRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>) =>
+
+    const httpRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>, store: any) =>
         action$.ofType(RX_HTTP_REQUEST)
-            .mergeMap(action => httpRequest(action$, configured(config, action)))
+            .mergeMap(action => httpRequest(action$, configured(config(store.getState()), action)))
 
     const startRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>): Observable<any> =>
         action$.ofType(RX_HTTP_REQUEST)
