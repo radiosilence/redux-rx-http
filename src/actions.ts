@@ -5,6 +5,7 @@ export const RX_HTTP_ERROR = '@@rx-http/ERROR'
 
 import {
     RxHttpRequest,
+    RxHttpRequestConfig,
     RxHttpRequestBase,
     RxHttpRequestAction,
     RxHttpActionTypes,
@@ -23,96 +24,86 @@ export const rxHttp = (request: RxHttpRequest,
 
 export const rxHttpGet = (path: string,
                           actionTypes: RxHttpActionTypes,
-                          request?: RxHttpRequestBase,
-                          args?: {},
-                          key?: string): RxHttpRequestAction =>
+                          config: RxHttpRequestConfig): RxHttpRequestAction =>
     rxHttp(
         {
-            ...request,
+            ...config.request,
             url: path,
             method: 'GET',
         },
         actionTypes,
-        args,
-        key,
+        config.args,
+        config.key,
     )
 
 export const rxHttpPost = (path: string,
                            actionTypes: RxHttpActionTypes,
-                           request?: RxHttpRequestBase,
-                           args?: {},
-                           key?: string): RxHttpRequestAction =>
+                           config: RxHttpRequestConfig): RxHttpRequestAction =>
     rxHttp(
         {
-            ...request,
+            ...config.request,
             url: path,
             method: 'POST',
         },
         actionTypes,
-        args,
-        key,
+        config.args,
+        config.key,
     )
 
-export const rxHttpPatch = (path: string,
-                            actionTypes: RxHttpActionTypes,
-                            request?: RxHttpRequestBase,
-                            args?: {},
-                            key?: string): RxHttpRequestAction =>
-    rxHttp(
-        {
-            ...request,
-            url: path,
-            method: 'PATCH',
-        },
-        actionTypes,
-        args,
-        key,
-    )
 
 export const rxHttpPut = (path: string,
                           actionTypes: RxHttpActionTypes,
-                          request?: RxHttpRequestBase,
-                          args?: {},
-                          key?: string): RxHttpRequestAction =>
+                          config: RxHttpRequestConfig): RxHttpRequestAction =>
     rxHttp(
         {
-            ...request,
+            ...config.request,
             url: path,
             method: 'PUT',
         },
         actionTypes,
-        args,
-        key,
+        config.args,
+        config.key,
+    )
+
+
+export const rxHttpPatch = (path: string,
+                            actionTypes: RxHttpActionTypes,
+                            config: RxHttpRequestConfig): RxHttpRequestAction =>
+    rxHttp(
+        {
+            ...config.request,
+            url: path,
+            method: 'PATCH',
+        },
+        actionTypes,
+        config.args,
+        config.key,
     )
 
 export const rxHttpDelete = (path: string,
                              actionTypes: RxHttpActionTypes,
-                             request?: RxHttpRequestBase,
-                             args?: {},
-                             key?: string): RxHttpRequestAction =>
+                             config: RxHttpRequestConfig): RxHttpRequestAction =>
     rxHttp(
         {
-            ...request,
+            ...config.request,
             url: path,
             method: 'DELETE',
         },
         actionTypes,
-        args,
-        key,
+        config.args,
+        config.key,
     )
 
 export const rxHttpHead = (path: string,
                            actionTypes: RxHttpActionTypes,
-                           request?: RxHttpRequestBase,
-                           args?: {},
-                           key?: string): RxHttpRequestAction =>
+                           config: RxHttpRequestConfig): RxHttpRequestAction =>
     rxHttp(
         {
-            ...request,
+            ...config.request,
             url: path,
             method: 'HEAD',
         },
         actionTypes,
-        args,
-        key,
+        config.args,
+        config.key,
     )

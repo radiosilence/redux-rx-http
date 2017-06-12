@@ -37,6 +37,12 @@ export interface RxHttpRequestAction {
     args?: {}
 }
 
+export interface RxHttpRequestConfig {
+    request?: RxHttpRequestBase
+    args?: {}
+    key?: string
+}
+
 export interface RxHttpRequestBase {
     params ?: QueryParams
     body ?: object
