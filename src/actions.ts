@@ -23,12 +23,14 @@ export const rxHttp = (request: RxHttpRequest,
 
 export const rxHttpGet = (path: string,
                           actionTypes: RxHttpActionTypes,
-                          config: RxHttpRequestConfig): RxHttpRequestAction =>
+                          params: {} = {},
+                          config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttp(
         {
             ...config.request,
             url: path,
             method: 'GET',
+            params,
         },
         actionTypes,
         config.args,
@@ -37,42 +39,46 @@ export const rxHttpGet = (path: string,
 
 export const rxHttpPost = (path: string,
                            actionTypes: RxHttpActionTypes,
-                           config: RxHttpRequestConfig): RxHttpRequestAction =>
+                           body?: any,
+                           config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttp(
         {
             ...config.request,
             url: path,
             method: 'POST',
+            body,
         },
         actionTypes,
         config.args,
         config.key,
     )
 
-
 export const rxHttpPut = (path: string,
                           actionTypes: RxHttpActionTypes,
-                          config: RxHttpRequestConfig): RxHttpRequestAction =>
+                          body?: any,
+                          config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttp(
         {
             ...config.request,
             url: path,
             method: 'PUT',
+            body,
         },
         actionTypes,
         config.args,
         config.key,
     )
 
-
 export const rxHttpPatch = (path: string,
                             actionTypes: RxHttpActionTypes,
-                            config: RxHttpRequestConfig): RxHttpRequestAction =>
+                            body?: any,
+                            config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttp(
         {
             ...config.request,
             url: path,
             method: 'PATCH',
+            body,
         },
         actionTypes,
         config.args,
@@ -81,7 +87,7 @@ export const rxHttpPatch = (path: string,
 
 export const rxHttpDelete = (path: string,
                              actionTypes: RxHttpActionTypes,
-                             config: RxHttpRequestConfig): RxHttpRequestAction =>
+                             config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttp(
         {
             ...config.request,
@@ -95,7 +101,7 @@ export const rxHttpDelete = (path: string,
 
 export const rxHttpHead = (path: string,
                            actionTypes: RxHttpActionTypes,
-                           config: RxHttpRequestConfig): RxHttpRequestAction =>
+                           config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttp(
         {
             ...config.request,
