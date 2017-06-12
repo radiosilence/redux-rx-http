@@ -96,7 +96,7 @@ const setPotato = (action$: ActionsObservable<any>): Observable<any> =>
 More complex usage
 ------------------
 
-Of course, simply getting a potato is simple, but each function takes a secondary argument of a
+Of course, simply getting a potato is simple, but each function takes a third argument of a
 relevant thing:
 
   * Query params: `rxHttpGet`
