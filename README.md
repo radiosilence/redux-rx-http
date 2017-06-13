@@ -85,11 +85,11 @@ const showSpinner = (action$: ActionsObservable<any>): Observable<any> =>
 // Consume the results of loading our potato!
 const setPotato = (action$: ActionsObservable<any>): Observable<any> =>
   action$.ofType(FETCH_POTATO.SUCCESS)
-    .map(action => ({ type: PotatoActions.SET_POTATO, courier: action.result }))
+    .map(action => ({ type: PotatoActions.SET_POTATO, potato: action.result }))
 
 // Handle erroneous potato fetch
   action$.ofType(FETCH_POTATO.ERROR)
-    .map(action => ({ type: PotatoActions.POTATO_ERROR, courier: action.error }))
+    .map(action => ({ type: PotatoActions.POTATO_ERROR, error: action.error }))
 
 ```
 
