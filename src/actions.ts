@@ -13,6 +13,7 @@ import {
     RxHttpRequestBase,
     RxHttpRequestConfig,
     RxHttpSuccess,
+    RxHttpQueryParams,
 } from './interfaces'
 
 export const rxHttpRequest = (request: RxHttpRequest,
@@ -28,7 +29,7 @@ export const rxHttpRequest = (request: RxHttpRequest,
 
 export const rxHttpGet = (path: string,
                           actionTypes: RxHttpActionTypes,
-                          params: {} = {},
+                          params: RxHttpQueryParams | null,
                           config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttpRequest(
         {
