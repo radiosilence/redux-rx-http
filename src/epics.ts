@@ -45,7 +45,7 @@ const rxFetch = ({ url, headers, method, body }: RxHttpRequest): Observable<any>
             try {
                 error.error = await response.json()
             } catch (parseError) {
-                error.error = parseError
+                error.error = response.body
             }
             throw error
         }
