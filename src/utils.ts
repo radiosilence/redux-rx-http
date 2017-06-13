@@ -18,7 +18,7 @@ export const createRxHttpActionTypes = (base: string): RxHttpActionTypes => ({
 export const rxHttpFetch = (rxHttpRequest: RxHttpRequest): Observable<any> =>
     Observable.from((async (): Promise<RxHttpFetchResponse> => {
         const { url, headers, method, params, body } = rxHttpRequest
-        const urlWithParams = params
+        const urlWithParams = params && Object.keys(params).length > 0
             ? `${url}?${stringify(params)}`
             : url
 
