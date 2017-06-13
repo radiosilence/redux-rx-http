@@ -16,6 +16,8 @@ import {
     RxHttpSuccess,
     RxHttpError,
     RxHttpConfig,
+    RxHttpFetchResponse,
+    RxHttpFetchError,
 } from './interfaces'
 
 import { RX_HTTP_REQUEST, RX_HTTP_SUCCESS, RX_HTTP_ERROR, RX_HTTP_FINALLY } from './actions'
@@ -33,6 +35,26 @@ const configured = (config: RxHttpConfig, action: RxHttpRequestAction): RxHttpRe
     },
 })
 
+const rxFetch = ({ url, headers, method, body }: RxHttpRequest): Observable<any> =>
+    Observable.from((async (): Promise<RxHttpFetchResponse> => {
+        const response = await fetch(new Request(url, { method, headers, body }))
+        if (!response.ok) {
+            const error = (new Error() as any)
+            error.response = response
+            error.status = response.status
+            try {
+                error.error = await response.json()
+            } catch (parseError) {
+                error.error = parseError
+            }
+            throw error
+        }
+        return ({
+            response,
+            data: await response.json(),
+        })
+    })())
+
 const httpRequest = (action$: any, action: RxHttpRequestAction) => {
     const {
         request: {
@@ -47,20 +69,20 @@ const httpRequest = (action$: any, action: RxHttpRequestAction) => {
         args,
     } = action
 
-    return ajax({
+    return rxFetch({
         url,
         headers,
         method: (method as string),
         body,
     })
-        .mergeMap((response: AjaxResponse) => [
+        .mergeMap((response: RxHttpFetchResponse) => [
             httpGlobalSuccess(response, key, args),
             httpSuccess(response, key, args, actionTypes),
             httpGlobalFinally(args),
             httpFinally(args, actionTypes),
         ])
         .takeUntil(action$.ofType(actionTypes.CANCEL))
-        .catch((error: any) => [
+        .catch((error: RxHttpFetchError) => [
             httpGlobalError(error, args),
             httpError(error, args, actionTypes),
             httpGlobalFinally(args),
@@ -68,29 +90,29 @@ const httpRequest = (action$: any, action: RxHttpRequestAction) => {
         ])
 }
 
-const httpSuccess = ({ response }: AjaxResponse,
+const httpSuccess = ({ data }: RxHttpFetchResponse,
                      key: string | undefined,
                      args: object | undefined,
                      actionTypes: RxHttpActionTypes) => ({
         type: actionTypes.SUCCESS,
-        result: key ? response[key] : response,
+        result: key ? data[key] : data,
         args,
     })
 
-const httpGlobalSuccess = ({ response }: AjaxResponse,
+const httpGlobalSuccess = (response: RxHttpFetchResponse,
                            key: string | undefined,
                            args: object | undefined): RxHttpSuccess => ({
         type: RX_HTTP_SUCCESS,
-        key,
         response,
+        key,
         args,
     })
 
 const httpError = (error: any, args: object | undefined,
                    actionTypes: RxHttpActionTypes) => ({
         type: actionTypes.ERROR,
-        payload: error.xhr.response,
-        error: true,
+        payload: error,
+        error: error.error,
         args,
     })
 
@@ -109,7 +131,6 @@ const httpGlobalFinally = (args: any) => ({
     type: RX_HTTP_FINALLY,
     args,
 })
-
 
 const startRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>): Observable<any> =>
     action$.ofType(RX_HTTP_REQUEST)

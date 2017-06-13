@@ -58,3 +58,14 @@ export interface RxHttpRequest extends RxHttpRequestBase {
     url: string
     method: string,
 }
+
+export interface RxHttpFetchResponse {
+    response: any
+    data: any
+}
+
+export interface RxHttpFetchError {
+    response: any
+    status: number
+    error: any
+}
