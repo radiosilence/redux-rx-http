@@ -30,7 +30,7 @@ export interface RxHttpActionTypes {
     FINALLY: symbol | string
 }
 
-export interface QueryParams {
+export interface RxHttpQueryParams {
     [key: string]: any
 }
 
@@ -49,7 +49,7 @@ export interface RxHttpRequestConfig {
 }
 
 export interface RxHttpRequestBase {
-    params ?: QueryParams | null
+    params ?: RxHttpQueryParams | null
     body ?: object
     headers ?: object
 }
