@@ -1,3 +1,4 @@
+import { stringify } from 'qs'
 import { Observable } from 'rxjs/Observable'
 
 import {
@@ -14,10 +15,15 @@ export const createRxHttpActionTypes = (base: string): RxHttpActionTypes => ({
     FINALLY: `${base}_FINALLY`,
 })
 
-
-export const rxHttpFetch = ({ url, headers, method, body }: RxHttpRequest): Observable<any> =>
+export const rxHttpFetch = (rxHttpRequest: RxHttpRequest): Observable<any> =>
     Observable.from((async (): Promise<RxHttpFetchResponse> => {
-        const response = await fetch(new Request(url, { method, headers, body }))
+        const { url, headers, method, params, body } = rxHttpRequest
+        const urlWithParams = params
+            ? `${url}?${stringify(params)}`
+            : url
+
+        const request = new Request(urlWithParams, { method, headers, body })
+        const response = await fetch(request)
         if (!response.ok) {
             const error = (new Error() as any)
             error.response = response

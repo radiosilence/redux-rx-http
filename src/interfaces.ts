@@ -49,7 +49,7 @@ export interface RxHttpRequestConfig {
 }
 
 export interface RxHttpRequestBase {
-    params ?: QueryParams
+    params ?: QueryParams | null
     body ?: object
     headers ?: object
 }

@@ -52,6 +52,7 @@ const httpRequest = (action$: any, action: RxHttpRequestAction) => {
         headers,
         method: (method as string),
         body,
+        params,
     })
         .mergeMap((response: RxHttpFetchResponse) => [
             rxHttpGlobalSuccess(response, key, args),
