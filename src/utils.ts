@@ -5,4 +5,5 @@ export const createRxHttpActionTypes = (base: string): RxHttpActionTypes => ({
     REQUEST: `${base}_REQUEST`,
     SUCCESS: `${base}_SUCCESS`,
     CANCEL: `${base}_CANCEL`,
+    FINALLY: `${base}_FINALLY`,
 })

@@ -57,11 +57,6 @@ const FETCH_POTATO = createRxHttpActionTypes('FETCH_POTATO')
 // Action to fetch a potat from our API
 export const fetchPotato = (id: string): RxHttpRequestAction =>
   rxHttpGet(`/potato/${id}`)
-
-
-// Action to cancel said fetching
-export const cancelFetchPotato = () => ({ type: FETCH_POTATO.CANCEL })
-
 ```
 
 `epics.ts`
@@ -75,11 +70,7 @@ const showSpinner = (action$: ActionsObservable<any>): Observable<any> =>
 
 // Hide the spinner on done.
 const showSpinner = (action$: ActionsObservable<any>): Observable<any> =>
-  action$.ofType(
-    FETCH_POTATO.SUCCESS,
-    FETCH_POTATO.ERROR,
-    FETCH_POTATO.CANCEL,
-  )
+  action$.ofType(FETCH_POTATO.FINALLY, FETCH_POTATO.CANCEL)
     .mapTo({ type: UIActions.HIDE_SPINNER })
 
 // Consume the results of loading our potato!
@@ -148,3 +139,15 @@ const potatoSavedNotification = (action$: ActionsObservable<any>): Observable<an
 ```
 
 I would advise against putting callbacks in args, as that entirely misses the point.
+
+
+Cancellation
+------------
+
+Because we're using observables, requests can be cancelled!
+
+`actions.ts`
+```typescript
+// Action to cancel said fetching
+export const cancelFetchPotato = () => ({ type: FETCH_POTATO.CANCEL })
+```

@@ -18,11 +18,16 @@ export interface RxHttpError {
     args?: object
 }
 
+export interface RxHttpFinally {
+    type: '@@rx-http/FINALLY'
+}
+
 export interface RxHttpActionTypes {
     REQUEST: symbol | string
     SUCCESS: symbol | string
     ERROR: symbol | string
     CANCEL: symbol | string
+    FINALLY: symbol | string
 }
 
 export interface QueryParams {

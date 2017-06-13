@@ -18,7 +18,7 @@ import {
     RxHttpConfig,
 } from './interfaces'
 
-import { RX_HTTP_REQUEST, RX_HTTP_SUCCESS, RX_HTTP_ERROR } from './actions'
+import { RX_HTTP_REQUEST, RX_HTTP_SUCCESS, RX_HTTP_ERROR, RX_HTTP_FINALLY } from './actions'
 
 const configured = (config: RxHttpConfig, action: RxHttpRequestAction): RxHttpRequestAction => ({
     ...action,
@@ -56,11 +56,15 @@ const httpRequest = (action$: any, action: RxHttpRequestAction) => {
         .mergeMap((response: AjaxResponse) => [
             httpGlobalSuccess(response, key, args),
             httpSuccess(response, key, args, actionTypes),
+            httpGlobalFinally(args),
+            httpFinally(args, actionTypes),
         ])
         .takeUntil(action$.ofType(actionTypes.CANCEL))
         .catch((error: any) => [
             httpGlobalError(error, args),
             httpError(error, args, actionTypes),
+            httpGlobalFinally(args),
+            httpFinally(args, actionTypes),
         ])
 }
 
@@ -95,6 +99,17 @@ const httpGlobalError = (error: any, args: object | undefined): RxHttpError => (
     args,
     error,
 })
+
+const httpFinally = (args: any, actionTypes: RxHttpActionTypes) => ({
+    type: actionTypes.FINALLY,
+    args,
+})
+
+const httpGlobalFinally = (args: any) => ({
+    type: RX_HTTP_FINALLY,
+    args,
+})
+
 
 const startRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>): Observable<any> =>
     action$.ofType(RX_HTTP_REQUEST)
