@@ -35,8 +35,15 @@ export const rxHttpFetch = (rxHttpRequest: RxHttpRequest): Observable<any> =>
             }
             throw error
         }
-        return ({
-            response,
-            data: await response.json(),
-        })
+        try {
+            return ({
+                response,
+                data: await response.json(),
+            })
+        } catch (parseError) {
+            return ({
+                response,
+                data: response.body,
+            })
+        }
     })())
