@@ -135,7 +135,7 @@ export const rxHttpRequestConfigured = (config: RxHttpConfig,
     request: {
         ...config,
         ...action.request,
-        url: `${config.baseUrl}${action.request.url}`,
+        url: `${action.request.baseUrl || config.baseUrl}${action.request.url}`,
         headers: {
             ...config.headers,
             ...action.request.headers,

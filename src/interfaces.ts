@@ -69,6 +69,7 @@ export interface RxHttpRequestBase {
     mode?: RxHttpRequestMode
     cache?: RxHttpRequestCache
     json?: boolean
+    baseUrl?: string
 }
 
 export interface RxHttpRequest extends RxHttpRequestBase {

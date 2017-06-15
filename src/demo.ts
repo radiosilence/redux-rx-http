@@ -51,6 +51,13 @@ const createButton = (name: string, cb: () => any) => {
 const getNode = createButton('GET', () => {
     store.dispatch(rxHttpGet('/', POTATO))
 })
+const getGhNode = createButton('GET github', () => {
+    store.dispatch(rxHttpGet('/zen', POTATO, null, {
+        request: {
+            baseUrl: 'http://api.github.com',
+        },
+    }))
+})
 
 const postNode = createButton('POST', () => {
     store.dispatch(rxHttpPost('/', POTATO, {
