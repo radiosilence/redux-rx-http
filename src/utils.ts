@@ -28,8 +28,6 @@ export const rxHttpFetch = (rxHttpRequest: RxHttpRequest): Observable<any> =>
             json,
         } = rxHttpRequest
 
-        console.log('rxHttpRequest', rxHttpRequest)
-
         const headers = new Headers(rxHttpRequest.headers)
 
         const urlWithParams = params && Object.keys(params).length > 0
@@ -44,11 +42,8 @@ export const rxHttpFetch = (rxHttpRequest: RxHttpRequest): Observable<any> =>
             cache,
         })
 
-        console.log('request mode', request.mode, mode)
-        console.log('request cache', request.cache, cache)
-
         const response = await fetch(request)
-        console.log('response', response.ok, response.status, response)
+
         if (!response.ok) {
             const error = (new Error() as any)
             error.response = response
