@@ -19,21 +19,29 @@ export interface RxHttpConfig {
     json?: boolean
 }
 
-export interface RxHttpSuccess {
+export interface RxHttpSuccessAction {
     type: '@@rx-http/SUCCESS'
     response: any
     key?: string
     args?: any
 }
 
-export interface RxHttpError {
+export interface RxHttpErrorAction {
     type: '@@rx-http/ERROR'
     error: Error | string
     args?: object
 }
 
-export interface RxHttpFinally {
+export interface RxHttpFinallyAction {
     type: '@@rx-http/FINALLY'
+}
+
+export interface RxHttpRequestAction {
+    type: '@@rx-http/REQUEST' | '@@rx-http/_REQUEST'
+    actionTypes: RxHttpActionTypes
+    request: RxHttpRequest
+    key?: string
+    args?: {}
 }
 
 export interface RxHttpActionTypes {
@@ -46,14 +54,6 @@ export interface RxHttpActionTypes {
 
 export interface RxHttpQueryParams {
     [key: string]: any
-}
-
-export interface RxHttpRequestAction {
-    type: '@@rx-http/REQUEST' | '@@rx-http/_REQUEST'
-    actionTypes: RxHttpActionTypes
-    request: RxHttpRequest
-    key?: string
-    args?: {}
 }
 
 export interface RxHttpRequestConfig {

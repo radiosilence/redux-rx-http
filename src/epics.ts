@@ -12,8 +12,6 @@ import {
     RxHttpRequestAction,
     RxHttpActionTypes,
     RxHttpRequest,
-    RxHttpSuccess,
-    RxHttpError,
     RxHttpConfig,
     RxHttpFetchResponse,
     RxHttpFetchError,
