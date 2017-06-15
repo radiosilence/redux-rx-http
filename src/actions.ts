@@ -1,5 +1,5 @@
 import {
-    RxHttpActions,
+    RxHttpActionTypes,
     RxHttpConfig,
     RxHttpErrorAction,
     RxHttpFetchResponse,
@@ -17,18 +17,18 @@ export const RX_HTTP_ERROR = '@@rx-http/ERROR'
 export const RX_HTTP_FINALLY = '@@rx-http/FINALLY'
 
 export const rxHttpRequest = (request: RxHttpRequest,
-                              actionTypes: RxHttpActions,
+                              actionTypes: RxHttpActionTypes,
                               args?: {},
                               key?: string): RxHttpRequestAction => ({
     type: RX_HTTP_REQUEST,
-    actions,
+    actionTypes,
     key,
     request,
     args,
 })
 
 export const rxHttpGet = (path: string,
-                          actionTypes: RxHttpActions,
+                          actionTypes: RxHttpActionTypes,
                           params?: RxHttpQueryParams | null,
                           config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttpRequest(
@@ -44,7 +44,7 @@ export const rxHttpGet = (path: string,
     )
 
 export const rxHttpPost = (path: string,
-                           actionTypes: RxHttpActions,
+                           actionTypes: RxHttpActionTypes,
                            body?: any,
                            config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttpRequest(
@@ -60,7 +60,7 @@ export const rxHttpPost = (path: string,
     )
 
 export const rxHttpPut = (path: string,
-                          actionTypes: RxHttpActions,
+                          actionTypes: RxHttpActionTypes,
                           body?: any,
                           config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttpRequest(
@@ -76,7 +76,7 @@ export const rxHttpPut = (path: string,
     )
 
 export const rxHttpPatch = (path: string,
-                            actionTypes: RxHttpActions,
+                            actionTypes: RxHttpActionTypes,
                             body?: any,
                             config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttpRequest(
@@ -92,7 +92,7 @@ export const rxHttpPatch = (path: string,
     )
 
 export const rxHttpDelete = (path: string,
-                             actionTypes: RxHttpActions,
+                             actionTypes: RxHttpActionTypes,
                              config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttpRequest(
         {
@@ -106,7 +106,7 @@ export const rxHttpDelete = (path: string,
     )
 
 export const rxHttpHead = (path: string,
-                           actionTypes: RxHttpActions,
+                           actionTypes: RxHttpActionTypes,
                            config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttpRequest(
         {
@@ -122,7 +122,7 @@ export const rxHttpHead = (path: string,
 export const rxHttpSuccess = ({ data }: RxHttpFetchResponse,
                               key: string | undefined,
                               args: object | undefined,
-                              actionTypes: RxHttpActions) => ({
+                              actionTypes: RxHttpActionTypes) => ({
         type: actionTypes.SUCCESS,
         result: key ? data[key] : data,
         args,
@@ -153,7 +153,7 @@ export const rxHttpGlobalSuccess = (response: RxHttpFetchResponse,
     })
 
 export const rxHttpError = (error: any, args: object | undefined,
-                            actionTypes: RxHttpActions) => ({
+                            actionTypes: RxHttpActionTypes) => ({
         type: actionTypes.ERROR,
         payload: error,
         error: error.error,
@@ -166,7 +166,7 @@ export const rxHttpGlobalError = (error: any, args: object | undefined): RxHttpE
     error,
 })
 
-export const rxHttpFinally = (args: any, actionTypes: RxHttpActions) => ({
+export const rxHttpFinally = (args: any, actionTypes: RxHttpActionTypes) => ({
     type: actionTypes.FINALLY,
     args,
 })
