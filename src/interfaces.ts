@@ -1,8 +1,21 @@
 import { AjaxResponse } from 'rxjs'
 
+export type RxHttpRequestMode = 'cors'
+    | 'no-cors'
+    | 'same-origin'
+    | 'navigate'
+
+export type RxHttpRequestCache = 'default'
+    | 'no-cache'
+    | 'no-store'
+    | 'reload'
+    | 'force-cache'
+
 export interface RxHttpConfig {
     headers?: object
     baseUrl?: string
+    mode?: RxHttpRequestMode
+    cache?: RxHttpRequestCache
 }
 
 export interface RxHttpSuccess {
@@ -51,7 +64,9 @@ export interface RxHttpRequestConfig {
 export interface RxHttpRequestBase {
     params ?: RxHttpQueryParams | null
     body ?: object
-    headers ?: object
+    headers?: object
+    mode?: RxHttpRequestMode
+    cache?: RxHttpRequestCache
 }
 
 export interface RxHttpRequest extends RxHttpRequestBase {

@@ -35,25 +35,13 @@ import { RX_HTTP_REQUEST, RX_HTTP_SUCCESS, RX_HTTP_ERROR, RX_HTTP_FINALLY } from
 
 const httpRequest = (action$: any, action: RxHttpRequestAction) => {
     const {
-        request: {
-            url,
-            method,
-            params,
-            body,
-            headers,
-        },
+        request,
         actionTypes,
         key,
         args,
     } = action
 
-    return rxHttpFetch({
-        url,
-        headers,
-        method: (method as string),
-        body,
-        params,
-    })
+    return rxHttpFetch(request)
         .mergeMap((response: RxHttpFetchResponse) => [
             rxHttpGlobalSuccess(response, key, args),
             rxHttpSuccess(response, key, args, actionTypes),
