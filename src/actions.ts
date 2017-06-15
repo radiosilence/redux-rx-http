@@ -11,8 +11,6 @@ import {
     RxHttpQueryParams,
 } from './interfaces'
 
-import { defaultConfig } from './constants'
-
 export const RX_HTTP_REQUEST = '@@rx-http/REQUEST'
 export const RX_HTTP_SUCCESS = '@@rx-http/SUCCESS'
 export const RX_HTTP_ERROR = '@@rx-http/ERROR'
@@ -135,12 +133,10 @@ export const rxHttpRequestConfigured = (config: RxHttpConfig,
     ...action,
     type: RX_HTTP_REQUEST,
     request: {
-        ...defaultConfig,
         ...config,
         ...action.request,
         url: `${config.baseUrl}${action.request.url}`,
         headers: {
-            ...defaultConfig.headers,
             ...config.headers,
             ...action.request.headers,
         },

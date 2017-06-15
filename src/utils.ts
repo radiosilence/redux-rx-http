@@ -25,6 +25,7 @@ export const rxHttpFetch = (rxHttpRequest: RxHttpRequest): Observable<any> =>
             body,
             mode,
             cache,
+            json,
         } = rxHttpRequest
 
         console.log('rxHttpRequest', rxHttpRequest)
@@ -36,9 +37,9 @@ export const rxHttpFetch = (rxHttpRequest: RxHttpRequest): Observable<any> =>
             : url
 
         const request = new Request(urlWithParams, {
+            body: json ? JSON.stringify(body) : body,
             method,
             headers,
-            body,
             mode,
             cache,
         })

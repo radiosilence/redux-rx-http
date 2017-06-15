@@ -16,6 +16,7 @@ export interface RxHttpConfig {
     baseUrl?: string
     mode?: RxHttpRequestMode
     cache?: RxHttpRequestCache
+    json?: boolean
 }
 
 export interface RxHttpSuccess {
@@ -67,11 +68,12 @@ export interface RxHttpRequestBase {
     headers?: object
     mode?: RxHttpRequestMode
     cache?: RxHttpRequestCache
+    json?: boolean
 }
 
 export interface RxHttpRequest extends RxHttpRequestBase {
     url: string
-    method: string,
+    method: string
 }
 
 export interface RxHttpFetchResponse {

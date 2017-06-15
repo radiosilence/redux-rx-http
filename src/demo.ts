@@ -15,6 +15,10 @@ const rootReducer = (state: RootState = {}, action: any) => state
 
 const rxHttpEpic = createRxHttpEpic(() => ({
     baseUrl: 'http://localhost:3030',
+    headers: {
+        'content-type': 'application/json',
+    },
+    json: true,
 }))
 
 const resultEpic = (action$: ActionsObservable<any>): any =>
@@ -49,7 +53,9 @@ const getNode = createButton('GET', () => {
 })
 
 const postNode = createButton('POST', () => {
-    alert('posttttttt')
+    store.dispatch(rxHttpPost('/', POTATO, {
+        some: 'data',
+    }))
 })
 
 const resultNode = document.createElement('pre')
