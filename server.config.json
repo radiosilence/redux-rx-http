@@ -1,0 +1,18 @@
+{
+  "server": {
+    "baseDir": "bundle",
+    "routes": {
+      "/src": "src"
+    }
+  },
+  "host": "local.dev",
+  "port": "3031",
+  "open": "external",
+  "watchOptions": {
+    "ignored": [
+      "node_modules",
+      "src",
+      "dist"
+    ]
+  }
+}

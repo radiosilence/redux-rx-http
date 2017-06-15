@@ -7,16 +7,21 @@
   "author": "James Cleveland",
   "license": "MIT",
   "devDependencies": {
+    "@types/redux": "^3.6.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "lite-server": "^2.3.0",
     "source-map-loader": "^0.2.1",
     "tslint": "^5.3.2",
     "tslint-config-airbnb": "^5.0.1",
     "tslint-react": "^3.0.0",
     "tsutils": "^2.1.0",
-    "typescript": "^2.4"
+    "typescript": "^2.4",
+    "webpack": "^2.6.1"
   },
   "dependencies": {
     "@types/jest": "^19.2.4",
-    "@types/node": "^7.0.29",
+    "@types/node": "^7.0.31",
     "@types/qs": "^6.2.31",
     "qs": "^6.4.0",
     "redux": "^3.6.0",
@@ -25,10 +30,11 @@
   },
   "scripts": {
     "start": "npm run tsfmt:replace && npm run dev:build",
+    "dev:build": "webpack -w",
+    "dev:serve": "lite-server -c server.config.json",
     "tsc:compile": "tsc",
     "tsc:watch": "tsc --watch --pretty",
     "lint": "tslint ./src/**/*.{ts,tsx}",
-    "prepublish": "rm -rf dist; npm run tsc:compile",
     "lint:fix": "tslint --fix ./src/**/*.{ts,tsx}"
   }
 }
