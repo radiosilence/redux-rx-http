@@ -2,9 +2,10 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import { rxHttpGet, rxHttpPost } from './actions'
 import { createRxHttpActionTypes } from './utils'
 
-import { createEpicMiddleware, combineEpics } from 'redux-observable';
+import { createEpicMiddleware, combineEpics, ActionsObservable } from 'redux-observable';
 
 import { createRxHttpEpic } from './epics'
+import { RX_HTTP_SUCCESS } from './actions'
 
 const POTATO = createRxHttpActionTypes('POTATO')
 
@@ -14,10 +15,13 @@ const rootReducer = (state: RootState = {}, action: any) => state
 
 const rxHttpEpic = createRxHttpEpic(() => ({
     baseUrl: 'http://localhost:3030',
-    mode: 'no-cors',
 }))
 
-const epicMiddleware = createEpicMiddleware(combineEpics(rxHttpEpic))
+const resultEpic = (action$: ActionsObservable<any>): any =>
+    action$.ofType(RX_HTTP_SUCCESS)
+        .map(result => resultNode.innerHTML = JSON.stringify(result.response.data))
+
+const epicMiddleware = createEpicMiddleware(combineEpics(rxHttpEpic, resultEpic))
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
