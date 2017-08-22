@@ -1,4 +1,3 @@
-import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/mergeMap'
 import 'rxjs/add/operator/takeUntil'
 import 'rxjs/add/operator/switchMap'
@@ -25,11 +24,13 @@ import {
     rxHttpGlobalError,
     rxHttpFinally,
     rxHttpGlobalFinally,
+    RX_HTTP_REQUEST,
+    RX_HTTP_SUCCESS,
+    RX_HTTP_ERROR,
+    RX_HTTP_FINALLY,
 } from './actions'
 
 import { rxHttpFetch } from './utils'
-
-import { RX_HTTP_REQUEST, RX_HTTP_SUCCESS, RX_HTTP_ERROR, RX_HTTP_FINALLY } from './actions'
 
 const httpRequest = (action$: any, action: RxHttpRequestAction) => {
     const {
