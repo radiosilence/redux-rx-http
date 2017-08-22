@@ -57,7 +57,7 @@ const httpRequest = (action$: any, action: RxHttpRequestAction) => {
 
 const startRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>): Observable<any> =>
     action$.ofType(RX_HTTP_REQUEST)
-        .map(({ actionTypes }: RxHttpRequestAction) => ({ type: actionTypes.REQUEST }))
+        .map(({ actionTypes, args }: RxHttpRequestAction) => ({ type: actionTypes.REQUEST, args }))
 
 export const createRxHttpEpic = (config: (store: any) => RxHttpConfig) => {
 
