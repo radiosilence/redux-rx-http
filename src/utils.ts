@@ -21,7 +21,7 @@ export const rxHttpFetch = (rxHttpRequest: RxHttpRequest): Observable<any> =>
         const {
             url,
             method,
-            params,
+            query,
             body,
             mode,
             cache,
@@ -30,8 +30,8 @@ export const rxHttpFetch = (rxHttpRequest: RxHttpRequest): Observable<any> =>
 
         const headers = new Headers(rxHttpRequest.headers)
 
-        const urlWithParams = params && Object.keys(params).length > 0
-            ? `${url}?${stringify(params)}`
+        const urlWithParams = query && Object.keys(query).length > 0
+            ? `${url}?${stringify(query)}`
             : url
 
         const request = new Request(urlWithParams, {
