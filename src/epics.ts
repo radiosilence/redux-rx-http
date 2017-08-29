@@ -1,3 +1,5 @@
+import { Store } from 'redux'
+
 import 'rxjs/add/operator/mergeMap'
 import 'rxjs/add/operator/takeUntil'
 import 'rxjs/add/operator/switchMap'
@@ -56,20 +58,20 @@ const httpRequest = (action$: any, action: RxHttpRequestAction) => {
         ])
 }
 
-const startRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>): Observable<any> =>
+const startRequestEpic
+    = (action$: ActionsObservable<RxHttpRequestAction>): Observable<any> =>
     action$.ofType(RX_HTTP_REQUEST)
         .map(({ actionTypes, args }: RxHttpRequestAction) => ({ type: actionTypes.REQUEST, args }))
 
-export const createRxHttpEpic = (config: (store: any) => RxHttpConfig) => {
-
-    const httpRequestEpic = (action$: ActionsObservable<RxHttpRequestAction>, store: any) =>
-        action$.ofType(RX_HTTP_REQUEST)
-            .mergeMap(action =>
-                httpRequest(action$, rxHttpRequestConfigured(config(store.getState()), action)),
-            )
-
-    return combineEpics(
-        httpRequestEpic,
+export const createRxHttpEpic = <T>(config: (state: T) => RxHttpConfig) =>
+    combineEpics(
+        (action$: ActionsObservable<RxHttpRequestAction>, store: Store<T>) =>
+            action$.ofType(RX_HTTP_REQUEST)
+                .mergeMap((action: RxHttpRequestAction) =>
+                    httpRequest(
+                        action$,
+                        rxHttpRequestConfigured(config(store.getState()), action),
+                    ),
+                ),
         startRequestEpic,
     )
-}

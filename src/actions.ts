@@ -46,10 +46,10 @@ export const rxHttpGet
     )
 
 export const rxHttpPost
-    = (path: string,
-       actionTypes: RxHttpActionTypes,
-       body?: any,
-       config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
+    = <T>(path: string,
+          actionTypes: RxHttpActionTypes,
+          body?: T,
+          config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttpRequest(
         {
             ...config.request,
@@ -63,10 +63,10 @@ export const rxHttpPost
     )
 
 export const rxHttpPut
-    = (path: string,
-       actionTypes: RxHttpActionTypes,
-       body?: any,
-       config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
+    = <T>(path: string,
+          actionTypes: RxHttpActionTypes,
+          body?: T,
+          config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttpRequest(
         {
             ...config.request,
@@ -80,10 +80,10 @@ export const rxHttpPut
     )
 
 export const rxHttpPatch
-    = (path: string,
-       actionTypes: RxHttpActionTypes,
-       body?: any,
-       config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
+    = <T>(path: string,
+          actionTypes: RxHttpActionTypes,
+          body?: T,
+          config: RxHttpRequestConfig = {}): RxHttpRequestAction =>
     rxHttpRequest(
         {
             ...config.request,
