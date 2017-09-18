@@ -66,6 +66,7 @@ export interface RxHttpRequestBase {
     query?: RxHttpQueryParams | null
     body?: object
     headers?: object
+    extraHeaders?: object
     mode?: RxHttpRequestMode
     cache?: RxHttpRequestCache
     json?: boolean
