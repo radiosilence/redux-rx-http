@@ -64,7 +64,7 @@ export interface RxHttpRequestConfig {
 
 export interface RxHttpRequestBase {
     query?: RxHttpQueryParams | null
-    body?: object
+    body?: any
     headers?: object
     extraHeaders?: object
     mode?: RxHttpRequestMode
