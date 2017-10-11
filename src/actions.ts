@@ -152,6 +152,11 @@ export const rxHttpRequestConfigured
     },
 })
 
+export type RxHttpGlobalSuccess
+    = (response: RxHttpFetchResponse,
+       key: string | undefined,
+       args: object | undefined) => RxHttpSuccessAction
+
 export const rxHttpGlobalSuccess
     = (response: RxHttpFetchResponse,
        key: string | undefined,

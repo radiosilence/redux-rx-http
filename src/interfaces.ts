@@ -88,3 +88,39 @@ export interface RxHttpFetchError {
     status: number
     error: any
 }
+
+/* Actions */
+
+export type RxHttpGet
+    = (path: string,
+       actionTypes: RxHttpActionTypes,
+       query?: RxHttpQueryParams | null,
+       config?: RxHttpRequestConfig) => RxHttpRequestAction
+
+export type RxHttpPost
+    = <T>(path: string,
+          actionTypes: RxHttpActionTypes,
+          body?: T,
+          config?: RxHttpRequestConfig) => RxHttpRequestAction
+
+export type RxHttpPut
+    = <T>(path: string,
+          actionTypes: RxHttpActionTypes,
+          body?: T,
+          config?: RxHttpRequestConfig) => RxHttpRequestAction
+
+export type RxHttpPatch
+    = <T>(path: string,
+          actionTypes: RxHttpActionTypes,
+          body?: T,
+          config?: RxHttpRequestConfig) => RxHttpRequestAction
+
+export type RxHttpDelete
+    = (path: string,
+       actionTypes: RxHttpActionTypes,
+       config?: RxHttpRequestConfig) => RxHttpRequestAction
+
+export type RxHttpHead
+    = (path: string,
+       actionTypes: RxHttpActionTypes,
+       config?: RxHttpRequestConfig) => RxHttpRequestAction
