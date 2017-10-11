@@ -3,7 +3,7 @@
   "version": "0.11.2",
   "description": "Uses react-observable to provide a nice way of talking to an API.",
   "main": "index.js",
-  "repository": "git@github.com:radiosilence/react-observable-http.git",
+  "repository": "git@github.com:radiosilence/redux-rx-http.git",
   "author": "James Cleveland",
   "license": "MIT",
   "devDependencies": {
