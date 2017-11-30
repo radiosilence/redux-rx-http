@@ -11,6 +11,10 @@ export type RxHttpRequestCache = 'default'
     | 'reload'
     | 'force-cache'
 
+export interface HeadersPayload {
+    [key: string]: string
+}
+
 export interface RxHttpConfig {
     headers?: object
     baseUrl?: string
@@ -65,8 +69,8 @@ export interface RxHttpRequestConfig {
 export interface RxHttpRequestBase {
     query?: RxHttpQueryParams | null
     body?: any
-    headers?: object
-    extraHeaders?: object
+    headers?: HeadersPayload
+    extraHeaders?: HeadersPayload
     mode?: RxHttpRequestMode
     cache?: RxHttpRequestCache
     json?: boolean
