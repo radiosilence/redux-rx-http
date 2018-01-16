@@ -8,7 +8,7 @@ are passed in with the initial action in a clean, consistent way. Oh, and we hav
 
 **Important note:** As of version 0.7, fetch is used internally. This means you will have to either
 rely on native fetch, or polyfill your own. Also, cancellation won't actually cancel the original
-request, it will just terminated the inner stream (so no further actions will be emitted).
+request, it will just terminate the inner stream (so no further actions will be emitted).
 
 
 Configuration
