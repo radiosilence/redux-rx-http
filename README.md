@@ -1,6 +1,8 @@
 redux-rx-http
 =============
 
+![CircleCI](https://circleci.com/gh/radiosilence/redux-rx-http.svg?style=shield)
+
 So, you like redux, you like RxJS, you're using redux-observable. You want to talk to APIs, and
 consume the side effects through epics, and you want a nice, simple way to do it. This library
 works by having a single API action where the side-effect actions (request, success, error, cancel)
