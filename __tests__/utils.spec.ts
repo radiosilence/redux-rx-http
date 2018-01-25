@@ -18,7 +18,3 @@ describe('createRxHttpActionTypes', () => {
         expect(createRxHttpActionTypes('potato')).not.toMatchObject(desiredActionTypes)
     })
 })
-
-// describe('rxHttpFetch', () => {
-//     rxHttpFetch()
-// })

@@ -14,4 +14,10 @@ module.exports = {
   setupFiles: [
       './__tests__/setup.js',
   ],
+  collectCoverage: false,
+  collectCoverageFrom: [
+    '**/src/*.{ts}',
+    "!**/node_modules/**",
+    "!**/vendor/**"
+  ]
 }
