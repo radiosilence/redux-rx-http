@@ -6,6 +6,7 @@ import {
     RxHttpActionTypes,
     RxHttpRequest,
     RxHttpFetchResponse,
+    RxHttpDependencies,
 } from './interfaces'
 
 export const createRxHttpActionTypes = (base: string): RxHttpActionTypes => ({
@@ -16,7 +17,9 @@ export const createRxHttpActionTypes = (base: string): RxHttpActionTypes => ({
     FINALLY: `${base}_FINALLY`.toUpperCase(),
 })
 
-export const rxHttpFetch = (rxHttpRequest: RxHttpRequest): Observable<any> =>
+export const rxHttpFetch
+    = (rxHttpRequest: RxHttpRequest,
+       { fetch }: RxHttpDependencies): Observable<any> =>
     Observable.from((async (): Promise<RxHttpFetchResponse> => {
         const {
             url,
@@ -41,9 +44,9 @@ export const rxHttpFetch = (rxHttpRequest: RxHttpRequest): Observable<any> =>
             mode,
             cache,
         })
-
+        console.log('FETCHING...')
         const response = await fetch(request)
-
+        console.log('RESPONSE', response)
         if (!response.ok) {
             const error = (new Error() as any)
             error.response = response

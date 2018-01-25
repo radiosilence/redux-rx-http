@@ -128,3 +128,8 @@ export type RxHttpHead
     = (path: string,
        actionTypes: RxHttpActionTypes,
        config?: RxHttpRequestConfig) => RxHttpRequestAction
+
+export type Fetch = (input: RequestInfo, init?: RequestInit) => Promise<Response>
+export interface RxHttpDependencies {
+    fetch: Fetch
+}

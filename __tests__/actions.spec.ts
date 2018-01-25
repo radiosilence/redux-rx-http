@@ -124,4 +124,16 @@ describe('rxHttpPatch', () => {
             },
         })
     })
+    it('should return a patch action with body', () => {
+        const action = A.rxHttpPatch(URL, ACTION_TYPES, { hi: 'ho' })
+        expect(action).toMatchObject({
+            type: A.RX_HTTP_REQUEST,
+            actionTypes: ACTION_TYPES,
+            request: {
+                url: URL,
+                method: 'PATCH',
+                body: { hi: 'ho' },
+            },
+        })
+    })
 })
