@@ -9,11 +9,11 @@ import {
 } from './interfaces'
 
 export const createRxHttpActionTypes = (base: string): RxHttpActionTypes => ({
-    ERROR: `${base}_ERROR`,
-    REQUEST: `${base}_REQUEST`,
-    SUCCESS: `${base}_SUCCESS`,
-    CANCEL: `${base}_CANCEL`,
-    FINALLY: `${base}_FINALLY`,
+    ERROR: `${base}_ERROR`.toUpperCase(),
+    REQUEST: `${base}_REQUEST`.toUpperCase(),
+    SUCCESS: `${base}_SUCCESS`.toUpperCase(),
+    CANCEL: `${base}_CANCEL`.toUpperCase(),
+    FINALLY: `${base}_FINALLY`.toUpperCase(),
 })
 
 export const rxHttpFetch = (rxHttpRequest: RxHttpRequest): Observable<any> =>

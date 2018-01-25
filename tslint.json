@@ -38,6 +38,7 @@
     "no-string-literal": true,
     "no-invalid-template-strings": true,
     "no-var-keyword": true,
+    "no-implicit-dependencies": false,
     "triple-equals": [true],
     "eofline": true,
     "trailing-comma": [
