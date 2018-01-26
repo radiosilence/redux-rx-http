@@ -129,12 +129,13 @@ export const rxHttpHead
     )
 
 export const rxHttpSuccess
-    = ({ data }: RxHttpFetchResponse,
+    = ({ data, response }: RxHttpFetchResponse,
        key: string | undefined,
        args: object | undefined,
        actionTypes: RxHttpActionTypes): RxHttpSuccessAction => ({
         type: actionTypes.SUCCESS,
-        result: key ? data[key] : data,
+            result: key ? data[key] : data,
+        response,
         args,
     })
 
@@ -169,7 +170,8 @@ export const rxHttpError
     = (error: any, args: object | undefined,
        actionTypes: RxHttpActionTypes): RxHttpErrorAction => ({
         type: actionTypes.ERROR,
-        error,
+        error: error.body,
+        response: error.response,
         args,
     })
 

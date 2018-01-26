@@ -31,12 +31,14 @@ export interface RxHttpError {
 export interface RxHttpSuccessAction {
     type: string
     result: any
+    response: Response
     args: any
 }
 
 export interface RxHttpErrorAction {
     type: string,
-    error: RxHttpError
+    error: string | object
+    response: Response
     args: any
 }
 

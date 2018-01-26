@@ -32,55 +32,79 @@ describe('http request', () => {
         fetchMock.mock(`${BASE_URL}/potatoes/2`, 404)
         fetchMock.mock(`${BASE_URL}/potatoes/3`, 'argh')
         fetchMock.mock(`${BASE_URL}/message`, { thanks: 'Thank you for your valuable input'})
+        fetchMock.mock(`${BASE_URL}/broken`, 500)
+        fetchMock.mock(`${BASE_URL}/post`, (req: any, opts: any) => req.body)
     });
 
     afterEach(() => {
         fetchMock.restore()
     })
 
-    it('stub', () => {
-        expect(1).toEqual(1)
-    })
-
     it('should get a request action', async () => {
         const action$ = ActionsObservable.of(rxHttpGet('/potatoes', ACTION_TYPES))
         const expectedOutputAction = {
             type: ACTION_TYPES.REQUEST,
-            args: undefined,
         }
 
         return startRequestEpic(action$)
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
-                expect(actualOutputActions).toContainEqual(expectedOutputAction)
+                expect(actualOutputActions[0]).toMatchObject(expectedOutputAction)
             })
     })
 
     it('should get a response success', (done) => {
         const action$ = ActionsObservable.of(rxHttpGet('/potatoes', ACTION_TYPES))
-        const expectedOutputAction = {
+        const expectedOutputAction: Partial<RxHttpSuccessAction> = {
             type: ACTION_TYPES.SUCCESS,
-            args: undefined,
             result: [{ id: 1, name: 'barry' }],
         }
 
         httpRequestEpic(action$, null, { fetch })
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
-                expect(actualOutputActions).toContainEqual
-                    (expectedOutputAction)
+                expect(actualOutputActions[1]).toMatchObject(expectedOutputAction)
                 done()
             })
     })
 
-    it('should get a response failure', (done) => {
+    it('should get a global response success', (done) => {
+        const action$ = ActionsObservable.of(rxHttpGet('/potatoes', ACTION_TYPES))
+        const expectedOutputAction = {
+            type: '@@rx-http/SUCCESS',
+        }
+
+        httpRequestEpic(action$, null, { fetch })
+            .toArray()
+            .subscribe((actualOutputActions: any[]) => {
+                expect(actualOutputActions[0]).toMatchObject(expectedOutputAction)
+                done()
+            })
+    })
+
+    it('should handle not found', (done) => {
         const action$ = ActionsObservable.of(rxHttpGet('/potatoes/2', ACTION_TYPES))
 
         httpRequestEpic(action$, null, { fetch })
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
                 const errorAction: RxHttpErrorAction = actualOutputActions[1]
-                expect(errorAction.error.response.status).toEqual(404)
+                expect(errorAction.response.status).toEqual(404)
+                done()
+            })
+    })
+
+    it('should get a global error', (done) => {
+        const action$ = ActionsObservable.of(rxHttpGet('/potatoes/2', ACTION_TYPES))
+
+        const expectedOutputAction = {
+            type: '@@rx-http/ERROR',
+        }
+
+        httpRequestEpic(action$, null, { fetch })
+            .toArray()
+            .subscribe((actualOutputActions: any[]) => {
+                expect(actualOutputActions[0]).toMatchObject(expectedOutputAction)
                 done()
             })
     })
@@ -91,26 +115,39 @@ describe('http request', () => {
         httpRequestEpic(action$, null, { fetch })
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
-                console.log('actualOutputActions', actualOutputActions)
                 const errorAction: RxHttpErrorAction = actualOutputActions[1]
-                expect(errorAction.error.body).toEqual(JSON_PARSE_ERROR)
+                expect(errorAction.error).toEqual(JSON_PARSE_ERROR)
                 done()
             })
     })
 
-    it('should post a request and get a message back', (done) => {
-        const action$ = ActionsObservable.of(rxHttpPost('/message', ACTION_TYPES, {
-            message: 'sup',
-        }))
+    it('should handle a 500 error', (done) => {
+        const action$ = ActionsObservable.of(rxHttpGet('/broken', ACTION_TYPES))
 
         httpRequestEpic(action$, null, { fetch })
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
-                console.log('actualOutputActions', actualOutputActions)
+                const errorAction: RxHttpErrorAction = actualOutputActions[1]
+                expect(errorAction.response.status).toEqual(500)
+                done()
+            })
+    })
+
+    it('should post some data', (done) => {
+        const action$ = ActionsObservable.of(rxHttpPost('/post', ACTION_TYPES, {
+            some: 'data',
+        }))
+        const expectedOutputAction: Partial<RxHttpSuccessAction> = {
+            type: ACTION_TYPES.SUCCESS,
+            result: { some: 'data' },
+        }
+
+        httpRequestEpic(action$, null, { fetch })
+            .toArray()
+            .subscribe((actualOutputActions: any[]) => {
                 const successAction: RxHttpSuccessAction = actualOutputActions[1]
-                expect(successAction.result).toMatchObject({
-                    thanks: 'Thank you for your valuable input',
-                })
+                expect(actualOutputActions[1]).toMatchObject(expectedOutputAction)
+                expect(successAction.response.status).toEqual(200)
                 done()
             })
     })
