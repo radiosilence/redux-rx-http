@@ -14,25 +14,35 @@ export type RxHttpRequestCache = 'default'
 export interface HeadersPayload {
     [key: string]: string
 }
+export type RxHttpConfigFactory<T> = (state: T | null) => RxHttpRequestBase
 
-export interface RxHttpConfig {
-    headers?: object
-    baseUrl?: string
-    mode?: RxHttpRequestMode
-    cache?: RxHttpRequestCache
-    json?: boolean
-}
-
-export interface RxHttpSuccessAction {
+export interface RxHttpGlobalSuccessAction {
     type: '@@rx-http/SUCCESS'
     response: any
     key?: string
     args?: any
 }
 
+export interface RxHttpError {
+    response: Response
+    error: any
+}
+
+export interface RxHttpSuccessAction {
+    type: string
+    result: any
+    args: any
+}
+
 export interface RxHttpErrorAction {
+    type: string,
+    error: RxHttpError
+    args: any
+}
+
+export interface RxHttpGlobalErrorAction {
     type: '@@rx-http/ERROR'
-    error: Error | string
+    error: RxHttpError
     args?: object
 }
 
@@ -48,12 +58,16 @@ export interface RxHttpRequestAction {
     args?: {}
 }
 
+export interface RxHttpRequestActionConfigured extends RxHttpRequestAction {
+    request: RxHttpRequestConfigured
+}
+
 export interface RxHttpActionTypes {
-    REQUEST: symbol | string
-    SUCCESS: symbol | string
-    ERROR: symbol | string
-    CANCEL: symbol | string
-    FINALLY: symbol | string
+    REQUEST: string
+    SUCCESS: string
+    ERROR: string
+    CANCEL: string
+    FINALLY: string
 }
 
 export interface RxHttpQueryParams {
@@ -73,13 +87,18 @@ export interface RxHttpRequestBase {
     extraHeaders?: HeadersPayload
     mode?: RxHttpRequestMode
     cache?: RxHttpRequestCache
-    json?: boolean
     baseUrl?: string
+    json?: boolean
 }
 
 export interface RxHttpRequest extends RxHttpRequestBase {
     url: string
     method: string
+    json?: boolean
+}
+
+export interface RxHttpRequestConfigured extends RxHttpRequest {
+    json: boolean
 }
 
 export interface RxHttpFetchResponse {

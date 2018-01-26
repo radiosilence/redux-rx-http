@@ -1,11 +1,10 @@
 import { createStore, applyMiddleware, compose } from 'redux'
-import { rxHttpGet, rxHttpPost } from './actions'
+import { rxHttpGet, rxHttpPost, RX_HTTP_SUCCESS } from './actions'
 import { createRxHttpActionTypes } from './utils'
 
 import { createEpicMiddleware, combineEpics, ActionsObservable } from 'redux-observable';
 
 import { createRxHttpEpic } from './epics'
-import { RX_HTTP_SUCCESS } from './actions'
 
 const POTATO = createRxHttpActionTypes('POTATO')
 

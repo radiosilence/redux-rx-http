@@ -1,11 +1,10 @@
+import 'rxjs/add/operator/toArray'
 import configureMockStore from 'redux-mock-store'
-import { createEpicMiddleware } from 'redux-observable'
+import { createEpicMiddleware, ActionsObservable } from 'redux-observable'
 import thunk from 'redux-thunk'
 import * as fetchMock from 'fetch-mock'
 
-import {
-    createRxHttpEpic,
-} from '../src/epics'
+import { createHttpRequestEpic, startRequestEpic } from '../src/epics'
 
 import {
     rxHttpGet,
@@ -17,33 +16,21 @@ import {
 
 const BASE_URL = 'https://not.a.real.domain'
 
-const rxHttpEpic = createRxHttpEpic(() => ({
+const ACTION_TYPES = createRxHttpActionTypes('TEST')
+
+const httpRequestEpic = createHttpRequestEpic(() => ({
     baseUrl: BASE_URL,
     json: true,
 }))
 
-const epicMiddleware = createEpicMiddleware(rxHttpEpic, {
-    dependencies: {
-        fetch,
-    },
-})
-const mockStore = configureMockStore([thunk, epicMiddleware])
-
-const ACTION_TYPES = createRxHttpActionTypes('TEST')
-
 describe('http request', () => {
-    let store;
-
     beforeEach(() => {
-        store = mockStore()
-        fetchMock.mock(`${BASE_URL}/potatoes`, {
-            potato: { id: 1, name: 'barry' },
-        })
+        fetchMock.mock(`${BASE_URL}/potatoes`, [{ id: 1, name: 'barry' }])
         fetchMock.mock(`${BASE_URL}/potatoes/1`, { id: 1, name: 'barry' })
+        fetchMock.mock(`${BASE_URL}/potatoes/2`, 404)
     });
 
     afterEach(() => {
-        epicMiddleware.replaceEpic(rxHttpEpic)
         fetchMock.restore()
     })
 
@@ -51,26 +38,53 @@ describe('http request', () => {
         expect(1).toEqual(1)
     })
 
-    // it('should get a response success', async () => {
-    //     store.dispatch(rxHttpGet('/potatoes/1', ACTION_TYPES))
-    //     console.log('dispatched!', await fetch(`${BASE_URL}/potatoes/1`))
-    //     console.log(store.getActions())
-    //     expect(store.getActions()).toContainEqual({
-    //         type: ACTION_TYPES.SUCCESS,
-    //         args: undefined,
-    //     })
-    // })
+    it('should get a request action', async () => {
+        const action$ = ActionsObservable.of(rxHttpGet('/potatoes', ACTION_TYPES))
+        const expectedOutputAction = {
+            type: ACTION_TYPES.REQUEST,
+            args: undefined,
+        }
 
-    // it('mocks simplest http get request', (done) => {
-    //     fetchMock.mock('http://rambo.was.ere', 301)
-    //     fetch('http://rambo.was.ere')
-    //         .then(res => {
-    //             console.log('res', res)
-    //             console.log('fetchMock.calls()', fetchMock.calls())
-    //             expect(fetchMock.calls().matched.length).toEqual(1)
-    //             expect(res.status).toEqual(301);
-    //             fetchMock.restore();
-    //             done();
-    //         });
-    // });
+        return startRequestEpic(action$)
+            .toArray()
+            .subscribe((actualOutputActions: any[]) => {
+                expect(actualOutputActions).toContainEqual(expectedOutputAction)
+            })
+    })
+
+    it('should get a response success', (done) => {
+        const action$ = ActionsObservable.of(rxHttpGet('/potatoes', ACTION_TYPES))
+        const expectedOutputAction = {
+            type: ACTION_TYPES.SUCCESS,
+            args: undefined,
+            result: [{ id: 1, name: 'barry' }],
+        }
+
+        httpRequestEpic(action$, null, { fetch })
+            .toArray()
+            .subscribe((actualOutputActions: any[]) => {
+                expect(actualOutputActions).toContainEqual
+                    (expectedOutputAction)
+                done()
+            })
+    })
+
+    it('should get a response failure', (done) => {
+        const action$ = ActionsObservable.of(rxHttpGet('/potatoes/2', ACTION_TYPES))
+        const expectedOutputAction = {
+            type: ACTION_TYPES.ERROR,
+            args: undefined,
+            error: { status: 404 },
+        }
+
+        httpRequestEpic(action$, null, { fetch })
+            .toArray()
+            .subscribe((actualOutputActions: any[]) => {
+                const errorAction = actualOutputActions[1]
+                expect(errorAction.error.response.status).toEqual(404)
+                // console.log('actual output', actualOutputActions[1])
+                done()
+            })
+    })
+
 })

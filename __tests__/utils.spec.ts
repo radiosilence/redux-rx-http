@@ -2,11 +2,11 @@ import { createRxHttpActionTypes, rxHttpFetch } from '../src/utils'
 
 describe('createRxHttpActionTypes', () => {
     const desiredActionTypes = {
-        ERROR: 'TEST_ERROR',
-        REQUEST: 'TEST_REQUEST',
-        SUCCESS: 'TEST_SUCCESS',
-        CANCEL: 'TEST_CANCEL',
-        FINALLY: 'TEST_FINALLY',
+        ERROR: '@@rx-http/TEST_ERROR',
+        REQUEST: '@@rx-http/TEST_REQUEST',
+        SUCCESS: '@@rx-http/TEST_SUCCESS',
+        CANCEL: '@@rx-http/TEST_CANCEL',
+        FINALLY: '@@rx-http/TEST_FINALLY',
     }
     it('should create an action types object', () => {
         expect(createRxHttpActionTypes('TEST')).toMatchObject(desiredActionTypes)

@@ -1,14 +1,16 @@
 import {
     RxHttpActionTypes,
-    RxHttpConfig,
-    RxHttpErrorAction,
+    RxHttpGlobalErrorAction,
     RxHttpFetchResponse,
     RxHttpRequest,
     RxHttpRequestAction,
     RxHttpRequestBase,
     RxHttpRequestConfig,
-    RxHttpSuccessAction,
+    RxHttpGlobalSuccessAction,
     RxHttpQueryParams,
+    RxHttpRequestActionConfigured,
+    RxHttpErrorAction,
+    RxHttpSuccessAction,
 } from './interfaces'
 
 export const RX_HTTP_REQUEST = '@@rx-http/REQUEST'
@@ -130,18 +132,19 @@ export const rxHttpSuccess
     = ({ data }: RxHttpFetchResponse,
        key: string | undefined,
        args: object | undefined,
-       actionTypes: RxHttpActionTypes) => ({
+       actionTypes: RxHttpActionTypes): RxHttpSuccessAction => ({
         type: actionTypes.SUCCESS,
         result: key ? data[key] : data,
         args,
     })
 
 export const rxHttpRequestConfigured
-    = (config: RxHttpConfig,
-       action: RxHttpRequestAction): RxHttpRequestAction => ({
+    = (config: RxHttpRequestBase,
+       action: RxHttpRequestAction): RxHttpRequestActionConfigured => ({
     ...action,
     type: RX_HTTP_REQUEST,
     request: {
+        json: true,
         ...config,
         ...action.request,
         url: `${action.request.baseUrl || config.baseUrl}${action.request.url}`,
@@ -152,15 +155,10 @@ export const rxHttpRequestConfigured
     },
 })
 
-export type RxHttpGlobalSuccess
-    = (response: RxHttpFetchResponse,
-       key: string | undefined,
-       args: object | undefined) => RxHttpSuccessAction
-
 export const rxHttpGlobalSuccess
     = (response: RxHttpFetchResponse,
        key: string | undefined,
-       args: object | undefined): RxHttpSuccessAction => ({
+       args: object | undefined): RxHttpGlobalSuccessAction => ({
         type: RX_HTTP_SUCCESS,
         response,
         key,
@@ -169,15 +167,14 @@ export const rxHttpGlobalSuccess
 
 export const rxHttpError
     = (error: any, args: object | undefined,
-       actionTypes: RxHttpActionTypes) => ({
+       actionTypes: RxHttpActionTypes): RxHttpErrorAction => ({
         type: actionTypes.ERROR,
-        payload: error,
-        error: error.error,
+        error,
         args,
     })
 
 export const rxHttpGlobalError
-    = (error: any, args: object | undefined): RxHttpErrorAction => ({
+    = (error: any, args: object | undefined): RxHttpGlobalErrorAction => ({
     type: RX_HTTP_ERROR,
     args,
     error,

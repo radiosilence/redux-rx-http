@@ -7,18 +7,41 @@ import {
     RxHttpRequest,
     RxHttpFetchResponse,
     RxHttpDependencies,
+    RxHttpError,
+    RxHttpRequestConfigured,
 } from './interfaces'
 
+const makeAction = (base: string, action: string) =>
+    `@@rx-http/${`${base}_${action}`.toUpperCase()}`
+
 export const createRxHttpActionTypes = (base: string): RxHttpActionTypes => ({
-    ERROR: `${base}_ERROR`.toUpperCase(),
-    REQUEST: `${base}_REQUEST`.toUpperCase(),
-    SUCCESS: `${base}_SUCCESS`.toUpperCase(),
-    CANCEL: `${base}_CANCEL`.toUpperCase(),
-    FINALLY: `${base}_FINALLY`.toUpperCase(),
+    ERROR: makeAction(base, 'ERROR'),
+    REQUEST: makeAction(base, 'REQUEST'),
+    SUCCESS: makeAction(base, 'SUCCESS'),
+    CANCEL: makeAction(base, 'CANCEL'),
+    FINALLY: makeAction(base, 'FINALLY'),
 })
 
+const JSON_PARSE_ERROR = 'Error parsing JSON'
+
+const getJsonFromResponse = async (response: Response, json: boolean) => {
+    if (response.body === undefined) return
+    try {
+        return await response.json()
+    } catch (parseError) {
+        if (json) {
+            const error: RxHttpError = {
+                response,
+                error: JSON_PARSE_ERROR,
+            }
+            throw error
+        }
+        return response.body
+    }
+}
+
 export const rxHttpFetch
-    = (rxHttpRequest: RxHttpRequest,
+    = (rxHttpRequest: RxHttpRequestConfigured,
        { fetch }: RxHttpDependencies): Observable<any> =>
     Observable.from((async (): Promise<RxHttpFetchResponse> => {
         const {
@@ -38,37 +61,27 @@ export const rxHttpFetch
             : url
 
         const request = new Request(urlWithParams, {
-            body: json ? JSON.stringify(body) : body,
+            body: json
+                ? JSON.stringify(body)
+                : body,
             method,
             headers,
             mode,
             cache,
         })
-        console.log('FETCHING...')
+
         const response = await fetch(request)
-        console.log('RESPONSE', response)
+
         if (!response.ok) {
-            const error = (new Error() as any)
-            error.response = response
-            error.status = response.status
-            try {
-                error.error = await response.json()
-            } catch (parseError) {
-                if (json) throw error
-                error.error = response.body
+            const error: RxHttpError = {
+                response,
+                error: await getJsonFromResponse(response, json),
             }
             throw error
         }
-        try {
-            return ({
-                response,
-                data: await response.json(),
-            })
-        } catch (parseError) {
-            if (json) throw parseError
-            return ({
-                response,
-                data: response.body,
-            })
+
+        return {
+            response,
+            data: await getJsonFromResponse(response, json),
         }
     })())
