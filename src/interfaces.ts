@@ -25,7 +25,7 @@ export interface RxHttpGlobalSuccessAction {
 
 export interface RxHttpError {
     response: Response
-    error: any
+    body: string | object
 }
 
 export interface RxHttpSuccessAction {

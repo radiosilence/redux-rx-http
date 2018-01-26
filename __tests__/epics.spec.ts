@@ -7,12 +7,14 @@ import * as fetchMock from 'fetch-mock'
 import { createHttpRequestEpic, startRequestEpic } from '../src/epics'
 
 import {
-    rxHttpGet,
+    rxHttpGet, rxHttpPost,
 } from '../src/actions'
 
 import {
     createRxHttpActionTypes,
+    JSON_PARSE_ERROR,
 } from '../src/utils'
+import { RxHttpErrorAction, RxHttpSuccessAction } from '../src/interfaces';
 
 const BASE_URL = 'https://not.a.real.domain'
 
@@ -28,6 +30,8 @@ describe('http request', () => {
         fetchMock.mock(`${BASE_URL}/potatoes`, [{ id: 1, name: 'barry' }])
         fetchMock.mock(`${BASE_URL}/potatoes/1`, { id: 1, name: 'barry' })
         fetchMock.mock(`${BASE_URL}/potatoes/2`, 404)
+        fetchMock.mock(`${BASE_URL}/potatoes/3`, 'argh')
+        fetchMock.mock(`${BASE_URL}/message`, { thanks: 'Thank you for your valuable input'})
     });
 
     afterEach(() => {
@@ -71,18 +75,42 @@ describe('http request', () => {
 
     it('should get a response failure', (done) => {
         const action$ = ActionsObservable.of(rxHttpGet('/potatoes/2', ACTION_TYPES))
-        const expectedOutputAction = {
-            type: ACTION_TYPES.ERROR,
-            args: undefined,
-            error: { status: 404 },
-        }
 
         httpRequestEpic(action$, null, { fetch })
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
-                const errorAction = actualOutputActions[1]
+                const errorAction: RxHttpErrorAction = actualOutputActions[1]
                 expect(errorAction.error.response.status).toEqual(404)
-                // console.log('actual output', actualOutputActions[1])
+                done()
+            })
+    })
+
+    it('should handle malformed json', (done) => {
+        const action$ = ActionsObservable.of(rxHttpGet('/potatoes/3', ACTION_TYPES))
+
+        httpRequestEpic(action$, null, { fetch })
+            .toArray()
+            .subscribe((actualOutputActions: any[]) => {
+                console.log('actualOutputActions', actualOutputActions)
+                const errorAction: RxHttpErrorAction = actualOutputActions[1]
+                expect(errorAction.error.body).toEqual(JSON_PARSE_ERROR)
+                done()
+            })
+    })
+
+    it('should post a request and get a message back', (done) => {
+        const action$ = ActionsObservable.of(rxHttpPost('/message', ACTION_TYPES, {
+            message: 'sup',
+        }))
+
+        httpRequestEpic(action$, null, { fetch })
+            .toArray()
+            .subscribe((actualOutputActions: any[]) => {
+                console.log('actualOutputActions', actualOutputActions)
+                const successAction: RxHttpSuccessAction = actualOutputActions[1]
+                expect(successAction.result).toMatchObject({
+                    thanks: 'Thank you for your valuable input',
+                })
                 done()
             })
     })

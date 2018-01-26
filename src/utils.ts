@@ -22,7 +22,7 @@ export const createRxHttpActionTypes = (base: string): RxHttpActionTypes => ({
     FINALLY: makeAction(base, 'FINALLY'),
 })
 
-const JSON_PARSE_ERROR = 'Error parsing JSON'
+export const JSON_PARSE_ERROR = 'Error parsing JSON'
 
 const getJsonFromResponse = async (response: Response, json: boolean) => {
     if (response.body === undefined) return
@@ -32,7 +32,7 @@ const getJsonFromResponse = async (response: Response, json: boolean) => {
         if (json) {
             const error: RxHttpError = {
                 response,
-                error: JSON_PARSE_ERROR,
+                body: JSON_PARSE_ERROR,
             }
             throw error
         }
@@ -75,7 +75,7 @@ export const rxHttpFetch
         if (!response.ok) {
             const error: RxHttpError = {
                 response,
-                error: await getJsonFromResponse(response, json),
+                body: await getJsonFromResponse(response, json),
             }
             throw error
         }
