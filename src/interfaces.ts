@@ -88,7 +88,7 @@ export interface RxHttpFetchResponse {
 }
 
 export interface RxHttpFetchError {
-    response: any
+    response: Response
     status: number
     error: any
 }
