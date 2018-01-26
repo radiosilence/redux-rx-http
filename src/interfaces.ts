@@ -83,7 +83,7 @@ export interface RxHttpRequest extends RxHttpRequestBase {
 }
 
 export interface RxHttpFetchResponse {
-    response: any
+    response: Response
     data: any
 }
 
