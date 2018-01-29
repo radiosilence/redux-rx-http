@@ -51,6 +51,6 @@
     "lint:fix": "tslint --fix ./src/**/*.{ts,tsx}",
     "prepublish": "npm run tsc:compile",
     "test": "NODE_CONFIG_STRICT_MODE=0 jest",
-    "coverage": "NODE_CONFIG_STRICT_MODE=0 jest --coverage"
+    "coverage": "NODE_CONFIG_STRICT_MODE=0 jest --no-cache --coverage"
   }
 }

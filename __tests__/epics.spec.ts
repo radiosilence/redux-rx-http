@@ -25,7 +25,22 @@ const httpRequestEpic = createHttpRequestEpic(() => ({
     json: true,
 }))
 
-describe('http request', () => {
+describe('startRequestEpic', () => {
+    it('should emit a request action', async () => {
+        const action$ = ActionsObservable.of(rxHttpGet('/potatoes', ACTION_TYPES))
+        const expectedOutputAction = {
+            type: ACTION_TYPES.REQUEST,
+        }
+
+        return startRequestEpic(action$)
+            .toArray()
+            .subscribe((actualOutputActions: any[]) => {
+                expect(actualOutputActions[0]).toMatchObject(expectedOutputAction)
+            })
+    })
+})
+
+describe('httpRequestEpic', () => {
     beforeEach(() => {
         fetchMock.mock(`${BASE_URL}/potatoes`, [{ id: 1, name: 'barry' }])
         fetchMock.mock(`${BASE_URL}/potatoes/1`, { id: 1, name: 'barry' })
@@ -38,24 +53,11 @@ describe('http request', () => {
         fetchMock.mock(`${BASE_URL}/patch/1`, (req: any) => ({
             id: 1,
             name: JSON.parse(req.body).name,
-        })
-    });
+        }))
+    })
 
     afterEach(() => {
         fetchMock.restore()
-    })
-
-    it('should get a request action', async () => {
-        const action$ = ActionsObservable.of(rxHttpGet('/potatoes', ACTION_TYPES))
-        const expectedOutputAction = {
-            type: ACTION_TYPES.REQUEST,
-        }
-
-        return startRequestEpic(action$)
-            .toArray()
-            .subscribe((actualOutputActions: any[]) => {
-                expect(actualOutputActions[0]).toMatchObject(expectedOutputAction)
-            })
     })
 
     it('should get a response success', (done) => {
