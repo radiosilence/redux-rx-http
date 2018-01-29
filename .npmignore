@@ -2,3 +2,5 @@
 /node_modules
 /build
 /bundle
+/__tests___
+/coverage
