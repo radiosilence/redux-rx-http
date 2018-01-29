@@ -7,7 +7,7 @@ import * as fetchMock from 'fetch-mock'
 import { createHttpRequestEpic, startRequestEpic } from '../src/epics'
 
 import {
-    rxHttpGet, rxHttpPost,
+    rxHttpGet, rxHttpPost, rxHttpDelete,
 } from '../src/actions'
 
 import {
@@ -34,6 +34,7 @@ describe('http request', () => {
         fetchMock.mock(`${BASE_URL}/message`, { thanks: 'Thank you for your valuable input'})
         fetchMock.mock(`${BASE_URL}/broken`, 500)
         fetchMock.mock(`${BASE_URL}/post`, (req: any, opts: any) => req.body)
+        fetchMock.mock(`${BASE_URL}/delete/1`, '"ok"')
     });
 
     afterEach(() => {
@@ -140,6 +141,23 @@ describe('http request', () => {
         const expectedOutputAction: Partial<RxHttpSuccessAction> = {
             type: ACTION_TYPES.SUCCESS,
             result: { some: 'data' },
+        }
+
+        httpRequestEpic(action$, null, { fetch })
+            .toArray()
+            .subscribe((actualOutputActions: any[]) => {
+                const successAction: RxHttpSuccessAction = actualOutputActions[1]
+                expect(actualOutputActions[1]).toMatchObject(expectedOutputAction)
+                expect(successAction.response.status).toEqual(200)
+                done()
+            })
+    })
+
+    it('should delete something', (done) => {
+        const action$ = ActionsObservable.of(rxHttpDelete('/delete/1', ACTION_TYPES))
+        const expectedOutputAction: Partial<RxHttpSuccessAction> = {
+            type: ACTION_TYPES.SUCCESS,
+            result: 'ok',
         }
 
         httpRequestEpic(action$, null, { fetch })

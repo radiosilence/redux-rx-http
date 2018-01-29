@@ -10,14 +10,17 @@ module.exports = {
         'jsx',
         'json',
     ],
-  verbose: true,
-  setupFiles: [
-      './__tests__/setup.js',
-  ],
-  collectCoverage: false,
-  collectCoverageFrom: [
-    '**/src/*.{ts}',
-    "!**/node_modules/**",
-    "!**/vendor/**"
-  ]
+    verbose: true,
+    setupFiles: [
+        './__tests__/setup.js',
+    ],
+    collectCoverage: false,
+    collectCoverageFrom: [
+        '**/src/*.{ts}',
+        '!**/src/interfaces.{ts}',
+        '!**/src/demo.{ts}',
+        "!**/node_modules/**",
+        "!**/vendor/**"
+    ],
+    coverageDirectory: 'coverage',
 }
