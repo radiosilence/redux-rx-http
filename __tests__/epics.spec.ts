@@ -7,7 +7,7 @@ import * as fetchMock from 'fetch-mock'
 import { createHttpRequestEpic, startRequestEpic } from '../src/epics'
 
 import {
-    rxHttpGet, rxHttpPost, rxHttpDelete,
+    rxHttpGet, rxHttpPost, rxHttpDelete, rxHttpPut,
 } from '../src/actions'
 
 import {
@@ -35,6 +35,10 @@ describe('http request', () => {
         fetchMock.mock(`${BASE_URL}/broken`, 500)
         fetchMock.mock(`${BASE_URL}/post`, (req: any, opts: any) => req.body)
         fetchMock.mock(`${BASE_URL}/delete/1`, '"ok"')
+        fetchMock.mock(`${BASE_URL}/patch/1`, (req: any) => ({
+            id: 1,
+            name: JSON.parse(req.body).name,
+        })
     });
 
     afterEach(() => {
@@ -170,4 +174,23 @@ describe('http request', () => {
             })
     })
 
+    it('should put some data', (done) => {
+        const action$ = ActionsObservable.of(rxHttpPut('/patch/1', ACTION_TYPES, {
+            id: 1,
+            name: 'steve',
+        }))
+        const expectedOutputAction: Partial<RxHttpSuccessAction> = {
+            type: ACTION_TYPES.SUCCESS,
+            result: { id: 1, name: 'steve' },
+        }
+
+        httpRequestEpic(action$, null, { fetch })
+            .toArray()
+            .subscribe((actualOutputActions: any[]) => {
+                const successAction: RxHttpSuccessAction = actualOutputActions[1]
+                expect(actualOutputActions[1]).toMatchObject(expectedOutputAction)
+                expect(successAction.response.status).toEqual(200)
+                done()
+            })
+    })
 })
