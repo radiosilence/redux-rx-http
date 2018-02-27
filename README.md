@@ -10,7 +10,6 @@ are passed in with the initial action in a clean, consistent way. Oh, and we hav
 > **Important note:** As of version 0.14, fetch is used internally. This means you will have to inject fetch as a dependency
 in your `createStore` function, whether that's global browser fetch, *whatwg-fetch* or *isomorphic-fetch*.
 
-
 ## Configuration
 
 Configuration allows you to set the base URL and initial headers for all requests.
@@ -20,7 +19,7 @@ config is done as a function, with store.getState() as the primary argument.
 
 For instance, say your authorisation token was acquired asyncronously and put in your store...
 
-### `configure-store.ts`
+**`configure-store.ts`**
 
 ```typescript
 // ...imports...
@@ -55,7 +54,7 @@ const store = createStore(
 
 To make a simple HTTP GET request, and then listen to the results...
 
-`actions.ts`
+**`actions.ts`**
 
 ```typescript
 import { rxHttpGet, createRxHttpActionTypes } from 'redux-rx-http'
@@ -67,7 +66,7 @@ export const fetchPotato = (id: string): RxHttpRequestAction =>
   rxHttpGet(`/potato/${id}`)
 ```
 
-### `epics.ts`
+**`epics.ts`**
 
 
 ```typescript
@@ -123,7 +122,7 @@ export interface RxHttpRequestConfig {
 
 So a more complex usage could look something like this:
 
-`actions.ts`
+**`actions.ts`**
 
 ```typescript
 export const fetchPotatosForField = (fieldId: string,
@@ -138,8 +137,7 @@ export const savePotato (potato: Potato): RxHttpRequestAction =>
   rxHttpPut(`/potato/${potato.id}`, SAVE_POTATO, potato, { args: { id } })
 ```
 
-
-`epics.ts`
+**`epics.ts`**
 
 ```typescript
 const potatoSavedNotification = (action$: ActionsObservable<PotatoAction>): Observable<UIAction> =>
@@ -152,12 +150,11 @@ const potatoSavedNotification = (action$: ActionsObservable<PotatoAction>): Obse
 
 I would advise against putting callbacks in args, as that entirely misses the point.
 
-
 ## Cancellation
 
 Because we're using observables, requests can be cancelled!
 
-`actions.ts`
+**`actions.ts`**
 
 ```typescript
 // Action to cancel said fetching
