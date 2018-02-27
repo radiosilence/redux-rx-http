@@ -37,7 +37,7 @@ export interface RxHttpSuccessAction {
 }
 
 export interface RxHttpErrorAction {
-    type: string,
+    type: string
     error: string | object
     response: Response
     args: any
