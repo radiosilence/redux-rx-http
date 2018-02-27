@@ -8,7 +8,7 @@ consume the side effects through epics, and you want a nice, simple way to do it
 works by having a single API action where the side-effect actions (request, success, error, cancel)
 are passed in with the initial action in a clean, consistent way. Oh, and we have type definitions!
 
-### As of version 0.14, fetch is used internally. This means you will have to inject fetch as a dependency
+> **Important note:** As of version 0.14, fetch is used internally. This means you will have to inject fetch as a dependency
 in your `createStore` function, whether that's global browser fetch, *whatwg-fetch* or *isomorphic-fetch*.
 
 
@@ -28,7 +28,7 @@ For instance, say your authorisation token was acquired asyncronously and put in
 // ...imports...
 import { createRxHttpEpic, RxHttpRequestBase } from 'redux-rx-http'
 
-const rxHttpEpic = createRxHttpEpic((state: any): RxHttpRequestBase => ({
+const rxHttpEpic = createRxHttpEpic((state: AppState): RxHttpRequestBase => ({
   baseUrl: 'https://my-excellent-api.com/v1.0',
   headers: {
     'Content-Type': 'application/json',
@@ -41,6 +41,7 @@ const epicMiddleware = createEpicMiddleware(
     rootEpic,
     rxHttpEpic,
   ),
+  // Inject our fetch dependency (at least)
   { dependencies: { fetch } },
 )
 
@@ -75,21 +76,22 @@ export const fetchPotato = (id: string): RxHttpRequestAction =>
 import { FETCH_POTATO } from './actions'
 
 // Simply take the request, and map it to some sort of UI action.
-const showSpinner = (action$: ActionsObservable<any>): Observable<any> =>
+const showSpinner = (action$: ActionsObservable<PotatoAction>): Observable<UIActio > =>
   action$.ofType(FETCH_POTATO.REQUEST)
     .mapTo({ type: UIActions.SHOW_SPINNER })
 
 // Hide the spinner on done.
-const showSpinner = (action$: ActionsObservable<any>): Observable<any> =>
+const showSpinner = (action$: ActionsObservable<PotatoAction>): Observable<UIActio > =>
   action$.ofType(FETCH_POTATO.FINALLY, FETCH_POTATO.CANCEL)
     .mapTo({ type: UIActions.HIDE_SPINNER })
 
 // Consume the results of loading our potato!
-const setPotato = (action$: ActionsObservable<any>): Observable<any> =>
+const setPotato = (action$: ActionsObservable<PotatoAction>): Observable<SetPotatoAction> =>
   action$.ofType(FETCH_POTATO.SUCCESS)
     .map(action => ({ type: PotatoActions.SET_POTATO, potato: action.result }))
 
 // Handle erroneous potato fetch
+const potatoError = (action$ ActionsObservable<PotatoAction>): Observable<PotatoErrorAction> =>
   action$.ofType(FETCH_POTATO.ERROR)
     .map(action => ({ type: PotatoActions.POTATO_ERROR, error: action.error }))
 
@@ -143,9 +145,9 @@ export const savePotato (potato: Potato): RxHttpRequestAction =>
 `epics.ts`
 
 ```typescript
-const potatoSavedNotification = (action$: ActionsObservable<any>): Observable<any> =>
+const potatoSavedNotification = (action$: ActionsObservable<SavePotatoAction>): Observable<NotifyAction> =>
   action$.ofType(SAVE_POTATO.SUCCESS)
-    .map(action => ({
+    .map((action: SavePotatoAction): NotifyAction => ({
       type: PotatoActions.NOTIFY,
       message: `Saved potato ${action.args.id} successfully!`,
     }))
