@@ -1,4 +1,5 @@
 import { AjaxResponse } from 'rxjs'
+import { RX_HTTP_SUCCESS, RX_HTTP_ERROR, RX_HTTP_FINALLY, RX_HTTP_REQUEST } from './actions';
 
 export type RxHttpRequestMode = 'cors'
     | 'no-cors'
@@ -17,7 +18,7 @@ export interface HeadersPayload {
 export type RxHttpConfigFactory<T> = (state: T | null) => RxHttpRequestBase
 
 export interface RxHttpGlobalSuccessAction {
-    type: '@@rx-http/SUCCESS'
+    type: typeof RX_HTTP_SUCCESS
     response: any
     key?: string
     args?: any
@@ -43,17 +44,17 @@ export interface RxHttpErrorAction {
 }
 
 export interface RxHttpGlobalErrorAction {
-    type: '@@rx-http/ERROR'
+    type: typeof RX_HTTP_ERROR
     error: RxHttpError
     args?: object
 }
 
 export interface RxHttpFinallyAction {
-    type: '@@rx-http/FINALLY'
+    type: typeof RX_HTTP_FINALLY
 }
 
 export interface RxHttpRequestAction {
-    type: '@@rx-http/REQUEST' | '@@rx-http/_REQUEST'
+    type: typeof RX_HTTP_REQUEST
     actionTypes: RxHttpActionTypes
     request: RxHttpRequest
     key?: string
