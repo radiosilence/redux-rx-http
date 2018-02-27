@@ -26,9 +26,9 @@ For instance, say your authorisation token was acquired asyncronously and put in
 `configure-store.ts`
 ```typescript
 // ...imports...
-import { createRxHttpEpic } from 'redux-rx-http'
+import { createRxHttpEpic, RxHttpRequestBase } from 'redux-rx-http'
 
-const rxHttpEpic = createRxHttpEpic((state) => ({
+const rxHttpEpic = createRxHttpEpic((state: any): RxHttpRequestBase => ({
   baseUrl: 'https://my-excellent-api.com/v1.0',
   headers: {
     'Content-Type': 'application/json',
