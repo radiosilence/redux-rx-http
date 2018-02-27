@@ -24,6 +24,7 @@ config is done as a function, with store.getState() as the primary argument.
 For instance, say your authorisation token was acquired asyncronously and put in your store...
 
 `configure-store.ts`
+
 ```typescript
 // ...imports...
 import { createRxHttpEpic, RxHttpRequestBase } from 'redux-rx-http'
@@ -55,6 +56,7 @@ Usage
 To make a simple HTTP GET request, and then listen to the results...
 
 `actions.ts`
+
 ```typescript
 import { rxHttpGet, createRxHttpActionTypes } from 'redux-rx-http'
 
@@ -66,6 +68,7 @@ export const fetchPotato = (id: string): RxHttpRequestAction =>
 ```
 
 `epics.ts`
+
 ```typescript
 import { FETCH_POTATO } from './actions'
 
@@ -96,9 +99,9 @@ More complex usage
 Of course, simply getting a potato is simple, but each function takes a third argument of a
 relevant thing:
 
-  * Query params: `rxHttpGet`
-  * Request body: `rxHttpPost`, `rxHttpPut`, `rxHttpPatch`
-  * None: `rxHttpDelete`, `rxHttpHead`
+* Query params: `rxHttpGet`
+* Request body: `rxHttpPost`, `rxHttpPut`, `rxHttpPatch`
+* None: `rxHttpDelete`, `rxHttpHead`
 
 And a final argument which is of type `RxHttpRequestConfig`.
 
@@ -120,6 +123,7 @@ export interface RxHttpRequestConfig {
 So a more complex usage could look something like this:
 
 `actions.ts`
+
 ```typescript
 export const fetchPotatosForField = (fieldId: string,
                                      status: Status = 'ALL'): RxHttpRequestAction =>
@@ -135,6 +139,7 @@ export const savePotato (potato: Potato): RxHttpRequestAction =>
 
 
 `epics.ts`
+
 ```typescript
 const potatoSavedNotification = (action$: ActionsObservable<any>): Observable<any> =>
   action$.ofType(SAVE_POTATO.SUCCESS)
@@ -153,6 +158,7 @@ Cancellation
 Because we're using observables, requests can be cancelled!
 
 `actions.ts`
+
 ```typescript
 // Action to cancel said fetching
 export const cancelFetchPotato = () => ({ type: FETCH_POTATO.CANCEL })
