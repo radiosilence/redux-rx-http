@@ -8,7 +8,7 @@ consume the side effects through epics, and you want a nice, simple way to do it
 works by having a single API action where the side-effect actions (request, success, error, cancel)
 are passed in with the initial action in a clean, consistent way. Oh, and we have type definitions!
 
-**Important note:** As of version 0.14, fetch is used internally. This means you will have to inject fetch as a dependency
+### As of version 0.14, fetch is used internally. This means you will have to inject fetch as a dependency
 in your `createStore` function, whether that's global browser fetch, *whatwg-fetch* or *isomorphic-fetch*.
 
 
@@ -21,8 +21,6 @@ Because your base request configuration could be dynamic based on your applicati
 config is done as a function, with store.getState() as the primary argument.
 
 For instance, say your authorisation token was acquired asyncronously and put in your store...
-
-**You also need t
 
 `configure-store.ts`
 
