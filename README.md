@@ -8,9 +8,8 @@ consume the side effects through epics, and you want a nice, simple way to do it
 works by having a single API action where the side-effect actions (request, success, error, cancel)
 are passed in with the initial action in a clean, consistent way. Oh, and we have type definitions!
 
-**Important note:** As of version 0.7, fetch is used internally. This means you will have to either
-rely on native fetch, or polyfill your own. Also, cancellation won't actually cancel the original
-request, it will just terminated the inner stream (so no further actions will be emitted).
+**Important note:** As of version 0.14, fetch is used internally. This means you will have to inject fetch as a dependency
+in your `createStore` function, whether that's global browser fetch, *whatwg-fetch* or *isomorphic-fetch*.
 
 
 Configuration
@@ -22,6 +21,8 @@ Because your base request configuration could be dynamic based on your applicati
 config is done as a function, with store.getState() as the primary argument.
 
 For instance, say your authorisation token was acquired asyncronously and put in your store...
+
+**You also need t
 
 `configure-store.ts`
 
@@ -37,10 +38,13 @@ const rxHttpEpic = createRxHttpEpic((state: any): RxHttpRequestBase => ({
   },
 }))
 
-const epicMiddleware = createEpicMiddleware(combineEpics(
-  rootEpic,
-  rxHttpEpic,
-))
+const epicMiddleware = createEpicMiddleware(
+  combineEpics(
+    rootEpic,
+    rxHttpEpic,
+  ),
+  { dependencies: { fetch } },
+)
 
 const store = createStore(
   rootReducer,

@@ -5,6 +5,7 @@ import { createRxHttpActionTypes } from './utils'
 import { createEpicMiddleware, combineEpics, ActionsObservable } from 'redux-observable';
 
 import { createRxHttpEpic } from './epics'
+import { Fetch } from './interfaces';
 
 const POTATO = createRxHttpActionTypes('POTATO')
 
@@ -24,7 +25,10 @@ const resultEpic = (action$: ActionsObservable<any>): any =>
     action$.ofType(RX_HTTP_SUCCESS)
         .map(result => resultNode.innerHTML = JSON.stringify(result.response.data))
 
-const epicMiddleware = createEpicMiddleware(combineEpics(rxHttpEpic, resultEpic))
+const epicMiddleware = createEpicMiddleware(
+    combineEpics(rxHttpEpic, resultEpic),
+    { dependencies: { fetch } },
+)
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
