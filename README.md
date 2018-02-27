@@ -1,5 +1,4 @@
-redux-rx-http
-=============
+# redux-rx-http
 
 [![CircleCI](https://circleci.com/gh/radiosilence/redux-rx-http.svg?style=shield)](https://circleci.com/gh/radiosilence/redux-rx-http)
 
@@ -12,8 +11,7 @@ are passed in with the initial action in a clean, consistent way. Oh, and we hav
 in your `createStore` function, whether that's global browser fetch, *whatwg-fetch* or *isomorphic-fetch*.
 
 
-Configuration
--------------
+## Configuration
 
 Configuration allows you to set the base URL and initial headers for all requests.
 
@@ -22,7 +20,7 @@ config is done as a function, with store.getState() as the primary argument.
 
 For instance, say your authorisation token was acquired asyncronously and put in your store...
 
-`configure-store.ts`
+### `configure-store.ts`
 
 ```typescript
 // ...imports...
@@ -53,8 +51,7 @@ const store = createStore(
 )
 ```
 
-Usage
------
+## Usage
 
 To make a simple HTTP GET request, and then listen to the results...
 
@@ -70,18 +67,19 @@ export const fetchPotato = (id: string): RxHttpRequestAction =>
   rxHttpGet(`/potato/${id}`)
 ```
 
-`epics.ts`
+### `epics.ts`
+
 
 ```typescript
 import { FETCH_POTATO } from './actions'
 
 // Simply take the request, and map it to some sort of UI action.
-const showSpinner = (action$: ActionsObservable<PotatoAction>): Observable<UIActio > =>
+const showSpinner = (action$: ActionsObservable<PotatoAction>): Observable<UIAction> =>
   action$.ofType(FETCH_POTATO.REQUEST)
     .mapTo({ type: UIActions.SHOW_SPINNER })
 
 // Hide the spinner on done.
-const showSpinner = (action$: ActionsObservable<PotatoAction>): Observable<UIActio > =>
+const showSpinner = (action$: ActionsObservable<PotatoAction>): Observable<UIAction> =>
   action$.ofType(FETCH_POTATO.FINALLY, FETCH_POTATO.CANCEL)
     .mapTo({ type: UIActions.HIDE_SPINNER })
 
@@ -97,8 +95,7 @@ const potatoError = (action$ ActionsObservable<PotatoAction>): Observable<Potato
 
 ```
 
-More complex usage
-------------------
+## More complex usage
 
 Of course, simply getting a potato is simple, but each function takes a third argument of a
 relevant thing:
@@ -145,10 +142,10 @@ export const savePotato (potato: Potato): RxHttpRequestAction =>
 `epics.ts`
 
 ```typescript
-const potatoSavedNotification = (action$: ActionsObservable<SavePotatoAction>): Observable<NotifyAction> =>
+const potatoSavedNotification = (action$: ActionsObservable<PotatoAction>): Observable<UIAction> =>
   action$.ofType(SAVE_POTATO.SUCCESS)
     .map((action: SavePotatoAction): NotifyAction => ({
-      type: PotatoActions.NOTIFY,
+      type: UIActions.NOTIFY,
       message: `Saved potato ${action.args.id} successfully!`,
     }))
 ```
@@ -156,8 +153,7 @@ const potatoSavedNotification = (action$: ActionsObservable<SavePotatoAction>): 
 I would advise against putting callbacks in args, as that entirely misses the point.
 
 
-Cancellation
-------------
+## Cancellation
 
 Because we're using observables, requests can be cancelled!
 
