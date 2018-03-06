@@ -134,7 +134,7 @@ export const rxHttpSuccess
        args: object | undefined,
        actionTypes: RxHttpActionTypes): RxHttpSuccessAction => ({
         type: actionTypes.SUCCESS,
-            result: key ? data[key] : data,
+        result: key ? data[key] : data,
         response,
         args,
     })

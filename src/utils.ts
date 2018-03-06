@@ -25,9 +25,10 @@ export const createRxHttpActionTypes = (base: string): RxHttpActionTypes => ({
 export const JSON_PARSE_ERROR = 'Error parsing JSON'
 
 const getJsonFromResponse = async (response: Response, json: boolean) => {
-    if (response.body === undefined) return
     try {
-        return await response.json()
+        return json
+            ? await response.json()
+            : response.body
     } catch (parseError) {
         if (json) {
             const error: RxHttpError = {
@@ -71,17 +72,18 @@ export const rxHttpFetch
         })
 
         const response = await fetch(request)
+        const data = await getJsonFromResponse(response, json)
 
         if (!response.ok) {
             const error: RxHttpError = {
                 response,
-                body: await getJsonFromResponse(response, json),
+                body: data,
             }
             throw error
         }
 
         return {
             response,
-            data: await getJsonFromResponse(response, json),
+            data,
         }
     })())

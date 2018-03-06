@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux'
+import thunk from 'redux-thunk'
 import { rxHttpGet, rxHttpPost, RX_HTTP_SUCCESS } from './actions'
 import { createRxHttpActionTypes } from './utils'
 
@@ -15,9 +16,6 @@ const rootReducer = (state: RootState = {}, action: any) => state
 
 const rxHttpEpic = createRxHttpEpic(() => ({
     baseUrl: 'http://localhost:3030',
-    headers: {
-        'content-type': 'application/json',
-    },
     json: true,
 }))
 
@@ -36,6 +34,7 @@ const store = createStore(
     rootReducer,
     composeEnhancers(
         applyMiddleware(
+            thunk,
             epicMiddleware,
         ),
     ),

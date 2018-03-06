@@ -53,7 +53,7 @@ const httpRequest
             rxHttpSuccess(response, key, args, actionTypes),
             rxHttpGlobalFinally(args),
             rxHttpFinally(args, actionTypes),
-    ])
+        ])
         .takeUntil(action$.ofType(actionTypes.CANCEL))
         .catch((error: RxHttpFetchError) => [
             rxHttpGlobalError(error, args),
@@ -67,20 +67,20 @@ export const createHttpRequestEpic = <T>(config: RxHttpConfigFactory<T>) =>
     (action$: ActionsObservable<RxHttpRequestAction>,
      store: Store<T>,
      dependencies: RxHttpDependencies): Observable<any> =>
-            action$.ofType(RX_HTTP_REQUEST)
-                .mergeMap((action: RxHttpRequestAction) =>
-                    httpRequest(
-                        action$,
-                        rxHttpRequestConfigured(
-                            config(
-                                store
-                                    ? store.getState()
-                                    : null,
-                            ),
-                            action,
+        action$.ofType(RX_HTTP_REQUEST)
+            .mergeMap((action: RxHttpRequestAction) =>
+                httpRequest(
+                    action$,
+                    rxHttpRequestConfigured(
+                        config(
+                            store
+                                ? store.getState()
+                                : null,
                         ),
-                        dependencies,
+                        action,
                     ),
+                    dependencies,
+                ),
         )
 
 export const startRequestEpic
