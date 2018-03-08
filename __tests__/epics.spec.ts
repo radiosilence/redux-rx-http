@@ -1,5 +1,4 @@
 import 'rxjs/add/operator/toArray'
-import configureMockStore from 'redux-mock-store'
 import { createEpicMiddleware, ActionsObservable } from 'redux-observable'
 import thunk from 'redux-thunk'
 import * as fetchMock from 'fetch-mock'
