@@ -8,7 +8,7 @@ works by having a single API action where the side-effect actions (request, succ
 are passed in with the initial action in a clean, consistent way. Oh, and we have type definitions!
 
 > **Important note:** As of version 0.14, fetch is used internally. This means you will have to inject fetch as a dependency
-in your `createEpicMiddleware` function, whether that's global browser fetch, *whatwg-fetch* or *isomorphic-fetch*.
+in your `createEpicMiddleware` function, whether that's global browser fetch, *whatwg-fetch* or *isomorphic-fetch*. The choice is yours.
 
 ## Configuration
 
