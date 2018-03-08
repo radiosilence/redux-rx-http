@@ -47,7 +47,7 @@
     "tsc:watch": "tsc --watch --pretty",
     "lint": "tslint ./src/**/*.{ts,tsx}",
     "lint:fix": "tslint --fix ./src/**/*.{ts,tsx}",
-    "prepublish": "npm run tsc:compile",
+    "prepublish": "npm test && npm run tsc:compile",
     "test": "jest",
     "coverage": "jest --no-cache --coverage"
   }
