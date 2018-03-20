@@ -9,12 +9,18 @@ describe('createRxHttpActionTypes', () => {
         FINALLY: '@@rx-http/TEST_FINALLY',
     }
     it('should create an action types object', () => {
-        expect(createRxHttpActionTypes('TEST')).toMatchObject(desiredActionTypes)
+        expect(createRxHttpActionTypes('TEST')).toMatchObject(
+            desiredActionTypes,
+        )
     })
     it('should create an action types object and uppercase string', () => {
-        expect(createRxHttpActionTypes('test')).toMatchObject(desiredActionTypes)
+        expect(createRxHttpActionTypes('test')).toMatchObject(
+            desiredActionTypes,
+        )
     })
     it('should fail to create the wrong action types', () => {
-        expect(createRxHttpActionTypes('potato')).not.toMatchObject(desiredActionTypes)
+        expect(createRxHttpActionTypes('potato')).not.toMatchObject(
+            desiredActionTypes,
+        )
     })
 })

@@ -5,7 +5,7 @@ import 'rxjs/add/observable/from'
 import {
     RxHttpActionTypes,
     RxHttpRequest,
-    RxHttpFetchResponse,
+    RxHttpResponse,
     RxHttpDependencies,
     RxHttpError,
     RxHttpRequestConfigured,
@@ -26,9 +26,7 @@ export const JSON_PARSE_ERROR = 'Error parsing JSON'
 
 const getJsonFromResponse = async (response: Response, json: boolean) => {
     try {
-        return json
-            ? await response.json()
-            : response.body
+        return json ? await response.json() : response.body
     } catch (parseError) {
         if (json) {
             const error: RxHttpError = {
@@ -41,49 +39,51 @@ const getJsonFromResponse = async (response: Response, json: boolean) => {
     }
 }
 
-export const rxHttpFetch
-    = (rxHttpRequest: RxHttpRequestConfigured,
-       { fetch }: RxHttpDependencies): Observable<any> =>
-    Observable.from((async (): Promise<RxHttpFetchResponse> => {
-        const {
-            url,
-            method,
-            query,
-            body,
-            mode,
-            cache,
-            json,
-        } = rxHttpRequest
+export const rxHttpFetch = (
+    rxHttpRequest: RxHttpRequestConfigured,
+    { fetch }: RxHttpDependencies,
+): Observable<any> =>
+    Observable.from(
+        (async (): Promise<RxHttpResponse> => {
+            const {
+                url,
+                method,
+                query,
+                body,
+                mode,
+                cache,
+                json,
+            } = rxHttpRequest
 
-        const headers = new Headers(rxHttpRequest.headers)
+            const headers = new Headers(rxHttpRequest.headers)
 
-        const urlWithParams = query && Object.keys(query).length > 0
-            ? `${url}?${stringify(query)}`
-            : url
+            const urlWithParams =
+                query && Object.keys(query).length > 0
+                    ? `${url}?${stringify(query)}`
+                    : url
 
-        const request = new Request(urlWithParams, {
-            body: json
-                ? JSON.stringify(body)
-                : body,
-            method,
-            headers,
-            mode,
-            cache,
-        })
+            const request = new Request(urlWithParams, {
+                body: json ? JSON.stringify(body) : body,
+                method,
+                headers,
+                mode,
+                cache,
+            })
 
-        const response = await fetch(request)
-        const data = await getJsonFromResponse(response, json)
+            const response = await fetch(request)
+            const data = await getJsonFromResponse(response, json)
 
-        if (!response.ok) {
-            const error: RxHttpError = {
-                response,
-                body: data,
+            if (!response.ok) {
+                const error: RxHttpError = {
+                    response,
+                    body: data,
+                }
+                throw error
             }
-            throw error
-        }
 
-        return {
-            response,
-            data,
-        }
-    })())
+            return {
+                response,
+                data,
+            }
+        })(),
+    )
