@@ -1,7 +1,5 @@
-/object
-/node_modules
-/build
-/bundle
-/__tests___
-/coverage
-/src
+src
+__tests__
+node_modules
+webpack.config.js
+
