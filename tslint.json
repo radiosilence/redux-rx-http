@@ -1,15 +1,13 @@
 {
-  "extends": [
-    "tslint:latest",
-    "tslint-react"
-  ],
+  "env": {
+    "browser": false,
+    "mocha": true,
+    "node": true
+  },
+  "extends": ["tslint:latest", "tslint-config-prettier"],
+  "rulesDirectory": ["tslint-plugin-prettier"],
   "globals": {
     "React": true
-  },
-  "env": {
-    "browser": true,
-    "node": true,
-    "mocha": true
   },
   "parserOptions": {
     "ecmaFeatures": {
@@ -17,85 +15,39 @@
     }
   },
   "rules": {
-    "arrow-parens": [
-      "ban-single-arg-parens"
-    ],
-    "semicolon": [
-      "never"
-    ],
-    "indent": [
-      true,
-      "spaces"
-    ],
-    "only-arrow-functions": [true],
-    "curly": [
-      true,
-      "ignore-same-line"
-    ],
-    "no-submodule-imports": false,
-    "no-conditional-assignment": true,
-    "no-duplicate-variable": true,
-    "no-string-literal": true,
-    "no-invalid-template-strings": true,
-    "no-var-keyword": true,
-    "triple-equals": [true],
-    "eofline": true,
-    "trailing-comma": [
-      true,
-      {
-        "multiline": "always",
-        "singleline": "never"
-      }
-    ],
+    "prettier": true,
+    "array-type": [true, "array"],
     "arrow-return-shorthand": [true, "multiline"],
-    "array-type": [
-      true,
-      "array"
-    ],
-    "no-trailing-whitespace": true,
-    "quotemark": [
-      true,
-      "single",
-      "jsx-double"
-    ],
-    "object-literal-shorthand": true,
-    "prefer-template": true,
-    "max-line-length": [
-      true,
-      100
-    ],
     "class-name": true,
-    "interface-name": [
-      true,
-      "never-prefix"
-    ],
-    "align": [
-      true,
-      "parameters",
-      "arguments",
-      "statements"
-    ],
-    "no-empty": false,
-    "no-empty-interface": false,
-    "ordered-imports": [false],
+    "comment-format": true,
+    "curly": [true, "ignore-same-line"],
+    "eofline": false,
+    "interface-name": [true, "never-prefix"],
+    "jsx-alignment": false,
+    "jsx-boolean-value": false,
     "jsx-no-multiline-js": false,
     "jsx-wrap-multiline": false,
-    "jsx-alignment": false,
-    "object-literal-sort-keys": false,
+    "no-submodule-imports": false,
+    "max-classes-per-file": [false],
+    "no-conditional-assignment": true,
     "no-console": [false],
-    "no-var-requires": false,
-    "jsx-boolean-value": false,
+    "no-duplicate-variable": true,
+    "no-empty": false,
+    "no-empty-interface": false,
+    "no-invalid-template-strings": true,
     "no-namespace": false,
-    "max-classes-per-file": [
-      false
-    ],
-    "no-unused-variable": [
-      true,
-      {
-        "ignore-pattern": "^_"
-      }
-    ],
-    "no-unused-expression": true,
-    "space-before-function-paren": [true, {"anonymous": "always"}]
+    "no-shadowed-variable": true,
+    "no-string-literal": true,
+    "no-unused-variable": true,
+    "no-use-before-declare": true,
+    "no-var-keyword": true,
+    "no-var-requires": false,
+    "object-literal-shorthand": true,
+    "object-literal-sort-keys": false,
+    "only-arrow-functions": [false],
+    "ordered-imports": [false],
+    "prefer-template": true,
+    "triple-equals": [true],
+    "variable-name": true
   }
 }

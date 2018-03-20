@@ -1,42 +1,50 @@
+/* tslint:disable:no-implicit-dependencies */
 import { createStore, applyMiddleware, compose } from 'redux'
-import { rxHttpGet, rxHttpPost } from './actions'
+import thunk from 'redux-thunk'
+import { rxHttpGet, rxHttpPost, RX_HTTP_SUCCESS } from './actions'
 import { createRxHttpActionTypes } from './utils'
 
-import { createEpicMiddleware, combineEpics, ActionsObservable } from 'redux-observable';
+import {
+    createEpicMiddleware,
+    combineEpics,
+    ActionsObservable,
+} from 'redux-observable'
 
 import { createRxHttpEpic } from './epics'
-import { RX_HTTP_SUCCESS } from './actions'
+import { Fetch } from './interfaces'
+/* tslint:enable:no-implicit-dependencies */
 
 const POTATO = createRxHttpActionTypes('POTATO')
 
-interface RootState { }
+interface RootState {}
 
 const rootReducer = (state: RootState = {}, action: any) => state
 
 const rxHttpEpic = createRxHttpEpic(() => ({
     baseUrl: 'http://localhost:3030',
-    headers: {
-        'content-type': 'application/json',
-    },
     json: true,
 }))
 
 const resultEpic = (action$: ActionsObservable<any>): any =>
-    action$.ofType(RX_HTTP_SUCCESS)
-        .map(result => resultNode.innerHTML = JSON.stringify(result.response.data))
+    action$
+        .ofType(RX_HTTP_SUCCESS)
+        .map(
+            (result) =>
+                (resultNode.innerHTML = JSON.stringify(result.response.data)),
+        )
 
-const epicMiddleware = createEpicMiddleware(combineEpics(rxHttpEpic, resultEpic))
+const epicMiddleware = createEpicMiddleware(
+    combineEpics(rxHttpEpic, resultEpic),
+    { dependencies: { fetch } },
+)
 
-const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers =
+    (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const store = createStore(
     rootReducer,
-    composeEnhancers(
-        applyMiddleware(
-            epicMiddleware,
-        ),
-    ),
-);
+    composeEnhancers(applyMiddleware(thunk, epicMiddleware)),
+)
 
 const createButton = (name: string, cb: () => any) => {
     const node = document.createElement('button')
@@ -52,17 +60,21 @@ const getNode = createButton('GET', () => {
     store.dispatch(rxHttpGet('/', POTATO))
 })
 const getGhNode = createButton('GET github', () => {
-    store.dispatch(rxHttpGet('/zen', POTATO, null, {
-        request: {
-            baseUrl: 'http://api.github.com',
-        },
-    }))
+    store.dispatch(
+        rxHttpGet('/zen', POTATO, null, {
+            request: {
+                baseUrl: 'http://api.github.com',
+            },
+        }),
+    )
 })
 
 const postNode = createButton('POST', () => {
-    store.dispatch(rxHttpPost('/', POTATO, {
-        some: 'data',
-    }))
+    store.dispatch(
+        rxHttpPost('/', POTATO, {
+            some: 'data',
+        }),
+    )
 })
 
 const resultNode = document.createElement('pre')

@@ -1,11 +1,15 @@
 import { AjaxResponse } from 'rxjs'
+import {
+    RX_HTTP_SUCCESS,
+    RX_HTTP_ERROR,
+    RX_HTTP_FINALLY,
+    RX_HTTP_REQUEST,
+} from './actions'
 
-export type RxHttpRequestMode = 'cors'
-    | 'no-cors'
-    | 'same-origin'
-    | 'navigate'
+export type RxHttpRequestMode = 'cors' | 'no-cors' | 'same-origin' | 'navigate'
 
-export type RxHttpRequestCache = 'default'
+export type RxHttpRequestCache =
+    | 'default'
     | 'no-cache'
     | 'no-store'
     | 'reload'
@@ -14,46 +18,62 @@ export type RxHttpRequestCache = 'default'
 export interface HeadersPayload {
     [key: string]: string
 }
+export type RxHttpConfigFactory<T> = (state: T | null) => RxHttpRequestBase
 
-export interface RxHttpConfig {
-    headers?: object
-    baseUrl?: string
-    mode?: RxHttpRequestMode
-    cache?: RxHttpRequestCache
-    json?: boolean
-}
-
-export interface RxHttpSuccessAction {
-    type: '@@rx-http/SUCCESS'
+export interface RxHttpGlobalSuccessAction {
+    type: typeof RX_HTTP_SUCCESS
     response: any
     key?: string
     args?: any
 }
 
+export interface RxHttpError {
+    response: Response
+    body: string | object
+}
+
+export interface RxHttpSuccessAction {
+    type: string
+    result: any
+    response: Response
+    args: any
+}
+
 export interface RxHttpErrorAction {
-    type: '@@rx-http/ERROR'
-    error: Error | string
+    type: string
+    error: string | object
+    response: Response
+    args: any
+}
+
+export interface RxHttpGlobalErrorAction {
+    type: typeof RX_HTTP_ERROR
+    error: RxHttpError
     args?: object
 }
 
 export interface RxHttpFinallyAction {
-    type: '@@rx-http/FINALLY'
+    type: typeof RX_HTTP_FINALLY
 }
 
 export interface RxHttpRequestAction {
-    type: '@@rx-http/REQUEST' | '@@rx-http/_REQUEST'
+    type: typeof RX_HTTP_REQUEST
     actionTypes: RxHttpActionTypes
     request: RxHttpRequest
     key?: string
     args?: {}
 }
 
+export interface RxHttpRequestActionConfigured extends RxHttpRequestAction {
+    request: RxHttpRequestConfigured
+}
+
 export interface RxHttpActionTypes {
-    REQUEST: symbol | string
-    SUCCESS: symbol | string
-    ERROR: symbol | string
-    CANCEL: symbol | string
-    FINALLY: symbol | string
+    REQUEST: string
+    SUCCESS: string
+    ERROR: string
+    CANCEL: string
+    FINALLY: string
 }
 
 export interface RxHttpQueryParams {
@@ -73,58 +93,71 @@ export interface RxHttpRequestBase {
     extraHeaders?: HeadersPayload
     mode?: RxHttpRequestMode
     cache?: RxHttpRequestCache
-    json?: boolean
     baseUrl?: string
+    json?: boolean
 }
 
 export interface RxHttpRequest extends RxHttpRequestBase {
     url: string
     method: string
+    json?: boolean
 }
 
-export interface RxHttpFetchResponse {
-    response: any
+export interface RxHttpRequestConfigured extends RxHttpRequest {
+    json: boolean
+}
+
+export interface RxHttpResponse {
+    response: Response
     data: any
-}
-
-export interface RxHttpFetchError {
-    response: any
-    status: number
-    error: any
 }
 
 /* Actions */
 
-export type RxHttpGet
-    = (path: string,
-       actionTypes: RxHttpActionTypes,
-       query?: RxHttpQueryParams | null,
-       config?: RxHttpRequestConfig) => RxHttpRequestAction
+export type RxHttpGet = (
+    path: string,
+    actionTypes: RxHttpActionTypes,
+    query?: RxHttpQueryParams | null,
+    config?: RxHttpRequestConfig,
+) => RxHttpRequestAction
 
-export type RxHttpPost
-    = <T>(path: string,
-          actionTypes: RxHttpActionTypes,
-          body?: T,
-          config?: RxHttpRequestConfig) => RxHttpRequestAction
+export type RxHttpPost = <T>(
+    path: string,
+    actionTypes: RxHttpActionTypes,
+    body?: T,
+    config?: RxHttpRequestConfig,
+) => RxHttpRequestAction
 
-export type RxHttpPut
-    = <T>(path: string,
-          actionTypes: RxHttpActionTypes,
-          body?: T,
-          config?: RxHttpRequestConfig) => RxHttpRequestAction
+export type RxHttpPut = <T>(
+    path: string,
+    actionTypes: RxHttpActionTypes,
+    body?: T,
+    config?: RxHttpRequestConfig,
+) => RxHttpRequestAction
 
-export type RxHttpPatch
-    = <T>(path: string,
-          actionTypes: RxHttpActionTypes,
-          body?: T,
-          config?: RxHttpRequestConfig) => RxHttpRequestAction
+export type RxHttpPatch = <T>(
+    path: string,
+    actionTypes: RxHttpActionTypes,
+    body?: T,
+    config?: RxHttpRequestConfig,
+) => RxHttpRequestAction
 
-export type RxHttpDelete
-    = (path: string,
-       actionTypes: RxHttpActionTypes,
-       config?: RxHttpRequestConfig) => RxHttpRequestAction
+export type RxHttpDelete = (
+    path: string,
+    actionTypes: RxHttpActionTypes,
+    config?: RxHttpRequestConfig,
+) => RxHttpRequestAction
 
-export type RxHttpHead
-    = (path: string,
-       actionTypes: RxHttpActionTypes,
-       config?: RxHttpRequestConfig) => RxHttpRequestAction
+export type RxHttpHead = (
+    path: string,
+    actionTypes: RxHttpActionTypes,
+    config?: RxHttpRequestConfig,
+) => RxHttpRequestAction
+
+export type Fetch = (
+    input: RequestInfo,
+    init?: RequestInit,
+) => Promise<Response>
+export interface RxHttpDependencies {
+    fetch: Fetch
+}

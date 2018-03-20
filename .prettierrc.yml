@@ -1,0 +1,11 @@
+# .prettierrc
+printWidth: 80
+parser: typescript
+tabWidth: 4
+useTabs: false
+semi: false
+singleQuote: true
+trailingComma: all
+bracketSpacing: true
+jsxBracketSameLine: true
+arrowParens: always
