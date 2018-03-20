@@ -47,11 +47,11 @@
     "start": "npm run dev:build",
     "dev:build": "webpack -w",
     "dev:serve": "lite-server -c server.config.json",
-    "tsc:compile": "tsc",
+    "tsc:compile": "rm -rf dist; tsc",
     "tsc:watch": "tsc --watch --pretty",
     "lint": "tslint ./src/**/*.{ts,tsx}",
     "lint:fix": "tslint --fix ./src/**/*.{ts,tsx}",
-    "prepublishOnly": "npm test && npm run tsc:compile",
+    "prepublishOnly": "npm i && npm test && npm run tsc:compile",
     "test": "jest",
     "coverage": "jest --no-cache --coverage"
   }
