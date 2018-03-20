@@ -11,6 +11,7 @@ import {
     RxHttpRequestActionConfigured,
     RxHttpErrorAction,
     RxHttpSuccessAction,
+    RxHttpError,
 } from './interfaces'
 
 export const RX_HTTP_REQUEST = '@@rx-http/REQUEST'
@@ -167,7 +168,7 @@ export const rxHttpGlobalSuccess
     })
 
 export const rxHttpError
-    = (error: any, args: object | undefined,
+    = (error: RxHttpError, args: object | undefined,
        actionTypes: RxHttpActionTypes): RxHttpErrorAction => ({
         type: actionTypes.ERROR,
         error: error.body,
@@ -176,7 +177,7 @@ export const rxHttpError
     })
 
 export const rxHttpGlobalError
-    = (error: any, args: object | undefined): RxHttpGlobalErrorAction => ({
+    = (error: RxHttpError, args: object | undefined): RxHttpGlobalErrorAction => ({
     type: RX_HTTP_ERROR,
     args,
     error,
