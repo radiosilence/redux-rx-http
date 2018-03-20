@@ -1,5 +1,4 @@
-redux-rx-http
-=============
+# redux-rx-http
 
 [![CircleCI](https://circleci.com/gh/radiosilence/redux-rx-http.svg?style=shield)](https://circleci.com/gh/radiosilence/redux-rx-http)
 
@@ -8,13 +7,10 @@ consume the side effects through epics, and you want a nice, simple way to do it
 works by having a single API action where the side-effect actions (request, success, error, cancel)
 are passed in with the initial action in a clean, consistent way. Oh, and we have type definitions!
 
-**Important note:** As of version 0.7, fetch is used internally. This means you will have to either
-rely on native fetch, or polyfill your own. Also, cancellation won't actually cancel the original
-request, it will just terminated the inner stream (so no further actions will be emitted).
+> **Important note:** As of version 0.14, fetch is used internally. This means you will have to inject fetch as a dependency
+in your `createEpicMiddleware` function, whether that's global browser fetch, *whatwg-fetch* or *isomorphic-fetch*. The choice is yours.
 
-
-Configuration
--------------
+## Configuration
 
 Configuration allows you to set the base URL and initial headers for all requests.
 
@@ -23,13 +19,13 @@ config is done as a function, with store.getState() as the primary argument.
 
 For instance, say your authorisation token was acquired asyncronously and put in your store...
 
-`configure-store.ts`
+**`configure-store.ts`**
 
 ```typescript
 // ...imports...
 import { createRxHttpEpic, RxHttpRequestBase } from 'redux-rx-http'
 
-const rxHttpEpic = createRxHttpEpic((state: any): RxHttpRequestBase => ({
+const rxHttpEpic = createRxHttpEpic((state: AppState): RxHttpRequestBase => ({
   baseUrl: 'https://my-excellent-api.com/v1.0',
   headers: {
     'Content-Type': 'application/json',
@@ -37,10 +33,14 @@ const rxHttpEpic = createRxHttpEpic((state: any): RxHttpRequestBase => ({
   },
 }))
 
-const epicMiddleware = createEpicMiddleware(combineEpics(
-  rootEpic,
-  rxHttpEpic,
-))
+const epicMiddleware = createEpicMiddleware(
+  combineEpics(
+    rootEpic,
+    rxHttpEpic,
+  ),
+  // Inject our fetch dependency (at least)
+  { dependencies: { fetch } },
+)
 
 const store = createStore(
   rootReducer,
@@ -50,12 +50,11 @@ const store = createStore(
 )
 ```
 
-Usage
------
+## Usage
 
 To make a simple HTTP GET request, and then listen to the results...
 
-`actions.ts`
+**`actions.ts`**
 
 ```typescript
 import { rxHttpGet, createRxHttpActionTypes } from 'redux-rx-http'
@@ -67,34 +66,35 @@ export const fetchPotato = (id: string): RxHttpRequestAction =>
   rxHttpGet(`/potato/${id}`)
 ```
 
-`epics.ts`
+**`epics.ts`**
+
 
 ```typescript
 import { FETCH_POTATO } from './actions'
 
 // Simply take the request, and map it to some sort of UI action.
-const showSpinner = (action$: ActionsObservable<any>): Observable<any> =>
+const showSpinner = (action$: ActionsObservable<PotatoAction>): Observable<UIAction> =>
   action$.ofType(FETCH_POTATO.REQUEST)
     .mapTo({ type: UIActions.SHOW_SPINNER })
 
 // Hide the spinner on done.
-const showSpinner = (action$: ActionsObservable<any>): Observable<any> =>
+const showSpinner = (action$: ActionsObservable<PotatoAction>): Observable<UIAction> =>
   action$.ofType(FETCH_POTATO.FINALLY, FETCH_POTATO.CANCEL)
     .mapTo({ type: UIActions.HIDE_SPINNER })
 
 // Consume the results of loading our potato!
-const setPotato = (action$: ActionsObservable<any>): Observable<any> =>
+const setPotato = (action$: ActionsObservable<PotatoAction>): Observable<SetPotatoAction> =>
   action$.ofType(FETCH_POTATO.SUCCESS)
     .map(action => ({ type: PotatoActions.SET_POTATO, potato: action.result }))
 
 // Handle erroneous potato fetch
+const potatoError = (action$ ActionsObservable<PotatoAction>): Observable<PotatoErrorAction> =>
   action$.ofType(FETCH_POTATO.ERROR)
     .map(action => ({ type: PotatoActions.POTATO_ERROR, error: action.error }))
 
 ```
 
-More complex usage
-------------------
+## More complex usage
 
 Of course, simply getting a potato is simple, but each function takes a third argument of a
 relevant thing:
@@ -122,7 +122,7 @@ export interface RxHttpRequestConfig {
 
 So a more complex usage could look something like this:
 
-`actions.ts`
+**`actions.ts`**
 
 ```typescript
 export const fetchPotatosForField = (fieldId: string,
@@ -137,27 +137,24 @@ export const savePotato (potato: Potato): RxHttpRequestAction =>
   rxHttpPut(`/potato/${potato.id}`, SAVE_POTATO, potato, { args: { id } })
 ```
 
-
-`epics.ts`
+**`epics.ts`**
 
 ```typescript
-const potatoSavedNotification = (action$: ActionsObservable<any>): Observable<any> =>
+const potatoSavedNotification = (action$: ActionsObservable<PotatoAction>): Observable<UIAction> =>
   action$.ofType(SAVE_POTATO.SUCCESS)
-    .map(action => ({
-      type: PotatoActions.NOTIFY,
+    .map((action: SavePotatoAction): NotifyAction => ({
+      type: UIActions.NOTIFY,
       message: `Saved potato ${action.args.id} successfully!`,
     }))
 ```
 
 I would advise against putting callbacks in args, as that entirely misses the point.
 
-
-Cancellation
-------------
+## Cancellation
 
 Because we're using observables, requests can be cancelled!
 
-`actions.ts`
+**`actions.ts`**
 
 ```typescript
 // Action to cancel said fetching
