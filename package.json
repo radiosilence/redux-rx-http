@@ -53,6 +53,7 @@
     "lint:fix": "tslint --fix ./src/**/*.{ts,tsx}",
     "prepublishOnly": "npm i && npm test && npm run tsc:compile",
     "test": "jest",
-    "coverage": "jest --no-cache --coverage"
+    "coverage": "jest --no-cache --coverage",
+    "prettier": "prettier --write './src/**/*.ts*'"
   }
 }
