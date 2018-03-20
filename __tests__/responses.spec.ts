@@ -6,24 +6,30 @@ const actionTypes = createRxHttpActionTypes('ARGH')
 
 describe('mocked responses', () => {
     it('should mock a successful response', () => {
-        const success = rxHttpSuccess(
+        const body = { fruit: 'tomato' }
+        const action = rxHttpSuccess(
             {
-                data: { tomato: 'tomato' },
-                response: new Response(),
+                data: { fruit: 'tomato' },
+                response: new Response(JSON.stringify(body), { status: 200 }),
             },
-            'tomato',
+            'fruit',
             undefined,
             actionTypes,
         )
 
-        expect(success.result).toBe('tomato')
+        expect(action.result).toBe(body.fruit)
+        expect(action.response.status).toEqual(200)
+        expect(action.response.ok).toEqual(true)
     })
     it('should mock an error response', () => {
-        const error = rxHttpError(
-            { body: 'argh', response: new Response() },
+        const body = { message: 'argh' }
+        const action = rxHttpError(
+            { body: 'argh', response: new Response(JSON.stringify(body), { status: 500 }) },
             undefined,
             actionTypes,
         )
-        expect(error.error).toEqual('argh')
+        expect(action.error).toEqual('argh')
+        expect(action.response.status).toEqual(500)
+        expect(action.response.ok).toEqual(false)
     })
 })
