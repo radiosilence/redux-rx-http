@@ -6,7 +6,7 @@ import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/mapTo'
 import 'rxjs/add/operator/map'
 
-import { ActionsObservable, combineEpics } from 'redux-observable'
+import { ActionsObservable, combineEpics, Epic } from 'redux-observable'
 import { Observable } from 'rxjs/Observable'
 
 import {
