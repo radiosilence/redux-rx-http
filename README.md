@@ -26,7 +26,7 @@ For instance, say your authorisation token was acquired asyncronously and put in
 // ...imports...
 import { createRxHttpEpic, RxHttpRequestBase } from 'redux-rx-http'
 
-const rxHttpEpic = createRxHttpEpic((state: AppState): RxHttpRequestBase => ({
+const rxHttpEpic = createRxHttpEpic((state: AppState) => ({
     baseUrl: 'https://my-excellent-api.com/v1.0',
     headers: {
         // Here we're dynamically configuring the auth token
@@ -55,7 +55,7 @@ import { rxHttpGet, createRxHttpActionTypes } from 'redux-rx-http'
 const FETCH_POTATO = createRxHttpActionTypes('FETCH_POTATO')
 
 // Action to fetch a potat from our API
-export const fetchPotato = (id: string): RxHttpRequestAction =>
+export const fetchPotato = (id: string) =>
     rxHttpGet(`/potato/${id}`)
 ```
 
@@ -65,22 +65,22 @@ export const fetchPotato = (id: string): RxHttpRequestAction =>
 import { FETCH_POTATO } from './actions'
 
 // Simply take the request, and map it to some sort of UI action.
-const showSpinner = (action$: ActionsObservable<PotatoAction>): Observable<UIAction> =>
+const showSpinner = (action$: ActionsObservable<PotatoAction>) =>
   action$.ofType(FETCH_POTATO.REQUEST)
     .mapTo({ type: UIActions.SHOW_SPINNER })
 
 // Hide the spinner on done.
-const showSpinner = (action$: ActionsObservable<PotatoAction>): Observable<UIAction> =>
+const showSpinner = (action$: ActionsObservable<PotatoAction>) =>
   action$.ofType(FETCH_POTATO.FINALLY, FETCH_POTATO.CANCEL)
     .mapTo({ type: UIActions.HIDE_SPINNER })
 
 // Consume the results of loading our potato!
-const setPotato = (action$: ActionsObservable<PotatoAction>): Observable<SetPotatoAction> =>
+const setPotato = (action$: ActionsObservable<PotatoAction>) =>
   action$.ofType(FETCH_POTATO.SUCCESS)
     .map(action => ({ type: PotatoActions.SET_POTATO, potato: action.result }))
 
 // Handle erroneous potato fetch
-const potatoError = (action$ ActionsObservable<PotatoAction>): Observable<PotatoErrorAction> =>
+const potatoError = (action$ ActionsObservable<PotatoAction>) =>
   action$.ofType(FETCH_POTATO.ERROR)
     .map(action => ({ type: PotatoActions.POTATO_ERROR, error: action.error }))
 
@@ -118,23 +118,23 @@ So a more complex usage could look something like this:
 
 ```typescript
 export const fetchPotatosForField = (fieldId: string,
-                                     status: Status = 'ALL'): RxHttpRequestAction =>
+                                     status: Status = 'ALL') =>
   rxHttpGet(`/fields/${fieldId}/potatoes`, FETCH_POTATOES_FOR_FIELD, { status }, {
     key: 'potatoes',
     args: { fieldId },
   })
 
 
-export const savePotato (potato: Potato): RxHttpRequestAction =>
+export const savePotato (potato: Potato) =>
   rxHttpPut(`/potato/${potato.id}`, SAVE_POTATO, potato, { args: { id } })
 ```
 
 **`epics.ts`**
 
 ```typescript
-const potatoSavedNotification = (action$: ActionsObservable<PotatoAction>): Observable<UIAction> =>
+const potatoSavedNotification = (action$: ActionsObservable<PotatoAction>) =>
   action$.ofType(SAVE_POTATO.SUCCESS)
-    .map((action: SavePotatoAction): NotifyAction => ({
+    .map((action: SavePotatoAction) => ({
       type: UIActions.NOTIFY,
       message: `Saved potato ${action.args.id} successfully!`,
     }))

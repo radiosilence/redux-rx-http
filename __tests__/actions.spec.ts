@@ -1,7 +1,7 @@
 import * as A from '../src/actions'
 import { createRxHttpActionTypes } from '../src/utils'
 
-const URL = 'https://example.com'
+const URL = 'https://potato.com'
 const ACTION_TYPES = createRxHttpActionTypes('TEST')
 
 describe('rxHttpGet', () => {

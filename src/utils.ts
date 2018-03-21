@@ -42,7 +42,7 @@ const getJsonFromResponse = async (response: Response, json: boolean) => {
 export const rxHttpFetch = (
     rxHttpRequest: RxHttpRequestConfigured,
     { fetch }: RxHttpDependencies,
-): Observable<RxHttpResponse> =>
+) =>
     Observable.from(
         (async () => {
             const {
