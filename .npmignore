@@ -5,8 +5,8 @@ node_modules
 ts*.*
 .*config
 .*ignore
-.prettierrc*
+.*rc*
 demo*
-README*
+*.log
 .circleci
 .vscode
