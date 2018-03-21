@@ -8,7 +8,11 @@ import { createHttpRequestEpic, startRequestEpic } from '../src/epics'
 import { rxHttpGet, rxHttpPost, rxHttpDelete, rxHttpPut } from '../src/actions'
 
 import { createRxHttpActionTypes, JSON_PARSE_ERROR } from '../src/utils'
-import { RxHttpErrorAction, RxHttpSuccessAction } from '../src/interfaces'
+import {
+    RxHttpErrorAction,
+    RxHttpSuccessAction,
+    RxHttpRequestAction,
+} from '../src/interfaces'
 
 const BASE_URL = 'https://not.a.real.domain'
 
@@ -21,9 +25,11 @@ const httpRequestEpic = createHttpRequestEpic(() => ({
 
 describe('startRequestEpic', () => {
     it('should emit a request action', async () => {
-        const action$ = ActionsObservable.of(
-            rxHttpGet('/potatoes', ACTION_TYPES),
-        )
+        const action = rxHttpGet(
+            '/potatoes',
+            ACTION_TYPES,
+        ) as RxHttpRequestAction
+        const action$ = ActionsObservable.of(action)
         const expectedOutputAction = {
             type: ACTION_TYPES.REQUEST,
         }
