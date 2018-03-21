@@ -38,12 +38,10 @@ import { rxHttpFetch } from './utils'
 
 const httpRequest = (
     action$: any,
-    action: RxHttpRequestActionConfigured,
+    { request, actionTypes, key, args }: RxHttpRequestActionConfigured,
     dependencies: RxHttpDependencies,
-) => {
-    const { request, actionTypes, key, args } = action
-
-    return rxHttpFetch(request, dependencies)
+) =>
+    rxHttpFetch(request, dependencies)
         .mergeMap((response: RxHttpResponse) => [
             rxHttpGlobalSuccess(response, key, args),
             rxHttpSuccess(response, key, args, actionTypes),
@@ -57,7 +55,6 @@ const httpRequest = (
             rxHttpGlobalFinally(args),
             rxHttpFinally(args, actionTypes),
         ])
-}
 
 export const createHttpRequestEpic = <T>(config: RxHttpConfigFactory<T>) => (
     action$: ActionsObservable<RxHttpRequestAction>,
