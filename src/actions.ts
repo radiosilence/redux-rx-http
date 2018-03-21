@@ -14,6 +14,8 @@ import {
     RxHttpError,
     RxHttpArgs,
     RxHttpStartRequestAction,
+    RxHttpFinallyAction,
+    RxHttpGlobalFinallyAction,
 } from './interfaces'
 
 export const RX_HTTP_REQUEST = '@@rx-http/REQUEST'
@@ -32,6 +34,24 @@ export const rxHttpRequest = (
     key,
     request,
     args,
+})
+
+export const rxHttpRequestConfigured = (
+    config: RxHttpRequestBase,
+    action: RxHttpRequestAction,
+): RxHttpRequestActionConfigured => ({
+    ...action,
+    type: RX_HTTP_REQUEST,
+    request: {
+        json: true,
+        ...config,
+        ...action.request,
+        url: `${action.request.baseUrl || config.baseUrl}${action.request.url}`,
+        headers: action.request.headers || {
+            ...config.headers,
+            ...action.request.extraHeaders,
+        },
+    },
 })
 
 export const rxHttpGet = (
@@ -158,24 +178,6 @@ export const rxHttpSuccess = (
     args,
 })
 
-export const rxHttpRequestConfigured = (
-    config: RxHttpRequestBase,
-    action: RxHttpRequestAction,
-): RxHttpRequestActionConfigured => ({
-    ...action,
-    type: RX_HTTP_REQUEST,
-    request: {
-        json: true,
-        ...config,
-        ...action.request,
-        url: `${action.request.baseUrl || config.baseUrl}${action.request.url}`,
-        headers: action.request.headers || {
-            ...config.headers,
-            ...action.request.extraHeaders,
-        },
-    },
-})
-
 export const rxHttpGlobalSuccess = (
     response: RxHttpResponse,
     key: string | undefined,
@@ -210,12 +212,14 @@ export const rxHttpGlobalError = (
 export const rxHttpFinally = (
     args: RxHttpArgs,
     actionTypes: RxHttpActionTypes,
-) => ({
+): RxHttpFinallyAction => ({
     type: actionTypes.FINALLY,
     args,
 })
 
-export const rxHttpGlobalFinally = (args: RxHttpArgs) => ({
+export const rxHttpGlobalFinally = (
+    args: RxHttpArgs,
+): RxHttpGlobalFinallyAction => ({
     type: RX_HTTP_FINALLY,
     args,
 })

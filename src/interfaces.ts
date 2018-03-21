@@ -59,7 +59,13 @@ export interface RxHttpGlobalErrorAction {
 }
 
 export interface RxHttpFinallyAction {
+    type: string
+    args: RxHttpArgs
+}
+
+export interface RxHttpGlobalFinallyAction {
     type: typeof RX_HTTP_FINALLY
+    args: RxHttpArgs
 }
 
 export interface RxHttpRequestAction {
