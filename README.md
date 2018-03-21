@@ -29,7 +29,6 @@ import { createRxHttpEpic, RxHttpRequestBase } from 'redux-rx-http'
 const rxHttpEpic = createRxHttpEpic((state: AppState): RxHttpRequestBase => ({
     baseUrl: 'https://my-excellent-api.com/v1.0',
     headers: {
-        'Content-Type': 'application/json',
         // Here we're dynamically configuring the auth token
         Authorization: getAuthToken(state),
     },
