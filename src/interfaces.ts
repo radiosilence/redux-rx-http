@@ -15,9 +15,12 @@ export type RxHttpRequestCache =
     | 'reload'
     | 'force-cache'
 
-export interface HeadersPayload {
-    [key: string]: string
+export interface Index<T> {
+    [key: string]: T
 }
+
+export type HeadersPayload = Index<string>
+
 export type RxHttpConfigFactory<T> = (state: T | null) => RxHttpRequestBase
 
 export type RxHttpArgs = object | undefined

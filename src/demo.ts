@@ -25,7 +25,7 @@ const rxHttpEpic = createRxHttpEpic(() => ({
     json: true,
 }))
 
-const resultEpic = (action$: ActionsObservable<any>): any =>
+const resultEpic = (action$: ActionsObservable<any>) =>
     action$
         .ofType(RX_HTTP_SUCCESS)
         .map(

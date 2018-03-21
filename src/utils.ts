@@ -14,7 +14,7 @@ import {
 const makeAction = (base: string, action: string) =>
     `@@rx-http/${`${base}_${action}`.toUpperCase()}`
 
-export const createRxHttpActionTypes = (base: string): RxHttpActionTypes => ({
+export const createRxHttpActionTypes = (base: string) => ({
     ERROR: makeAction(base, 'ERROR'),
     REQUEST: makeAction(base, 'REQUEST'),
     SUCCESS: makeAction(base, 'SUCCESS'),
@@ -44,7 +44,7 @@ export const rxHttpFetch = (
     { fetch }: RxHttpDependencies,
 ): Observable<RxHttpResponse> =>
     Observable.from(
-        (async (): Promise<RxHttpResponse> => {
+        (async () => {
             const {
                 url,
                 method,

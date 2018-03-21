@@ -63,24 +63,18 @@ export const createHttpRequestEpic = <T>(config: RxHttpConfigFactory<T>) => (
     action$: ActionsObservable<RxHttpAction>,
     store: Store<T>,
     dependencies: RxHttpDependencies,
-): Observable<RxHttpAction> =>
-    action$
-        .ofType(RX_HTTP_REQUEST)
-        .mergeMap((action: RxHttpRequestAction) =>
-            httpRequest(
-                action$,
-                rxHttpRequestConfigured(
-                    config(store ? store.getState() : null),
-                    action,
-                ),
-                dependencies,
-            ),
+) =>
+    action$.ofType(RX_HTTP_REQUEST).mergeMap((action: RxHttpRequestAction) => {
+        const requestConfigured = rxHttpRequestConfigured(
+            config(store ? store.getState() : null),
+            action,
         )
+        return httpRequest(action$, requestConfigured, dependencies)
+    })
 
 export const startRequestEpic = (
     action$: ActionsObservable<RxHttpRequestAction>,
-): Observable<RxHttpStartRequestAction> =>
-    action$.ofType(RX_HTTP_REQUEST).map(rxHttpStartRequest)
+) => action$.ofType(RX_HTTP_REQUEST).map(rxHttpStartRequest)
 
 export const createRxHttpEpic = <T>(config: RxHttpConfigFactory<T>) =>
     combineEpics(createHttpRequestEpic<T>(config), startRequestEpic)
