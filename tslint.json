@@ -34,7 +34,7 @@
     "no-console": false,
     "no-duplicate-variable": true,
     "no-empty": true,
-    "no-empty-interface": true,
+    "no-empty-interface": false,
     "no-invalid-template-strings": true,
     "no-namespace": false,
     "no-shadowed-variable": true,

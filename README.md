@@ -61,7 +61,6 @@ export const fetchPotato = (id: string): RxHttpRequestAction =>
 
 **`epics.ts`**
 
-
 ```typescript
 import { FETCH_POTATO } from './actions'
 

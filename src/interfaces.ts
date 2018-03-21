@@ -20,11 +20,17 @@ export interface HeadersPayload {
 }
 export type RxHttpConfigFactory<T> = (state: T | null) => RxHttpRequestBase
 
+export type RxHttpArgs = object | undefined
+
+export interface RxHttpStartRequestAction {
+    type: string
+    args: RxHttpArgs
+}
 export interface RxHttpGlobalSuccessAction {
     type: typeof RX_HTTP_SUCCESS
-    response: any
+    response: RxHttpResponse
     key?: string
-    args?: any
+    args: RxHttpArgs
 }
 
 export interface RxHttpError {
@@ -32,24 +38,24 @@ export interface RxHttpError {
     body: string | object
 }
 
-export interface RxHttpSuccessAction {
+export interface RxHttpSuccessAction<T = any> {
     type: string
-    result: any
+    result: T
     response: Response
-    args: any
+    args: RxHttpArgs
 }
 
 export interface RxHttpErrorAction {
     type: string
     error: string | object
     response: Response
-    args: any
+    args?: RxHttpArgs
 }
 
 export interface RxHttpGlobalErrorAction {
     type: typeof RX_HTTP_ERROR
     error: RxHttpError
-    args?: object
+    args?: RxHttpArgs
 }
 
 export interface RxHttpFinallyAction {
@@ -61,7 +67,7 @@ export interface RxHttpRequestAction {
     actionTypes: RxHttpActionTypes
     request: RxHttpRequest
     key?: string
-    args?: {}
+    args?: RxHttpArgs
 }
 
 export interface RxHttpRequestActionConfigured extends RxHttpRequestAction {
@@ -77,12 +83,12 @@ export interface RxHttpActionTypes {
 }
 
 export interface RxHttpQueryParams {
-    [key: string]: any
+    [key: string]: string
 }
 
 export interface RxHttpRequestConfig {
     request?: RxHttpRequestBase
-    args?: {}
+    args?: RxHttpArgs
     key?: string
 }
 
@@ -112,8 +118,13 @@ export interface RxHttpResponse {
     data: any
 }
 
-/* Actions */
+export type RxHttpAction =
+    | { type: string; args: RxHttpArgs }
+    | RxHttpGlobalErrorAction
+    | RxHttpErrorAction
+    | RxHttpRequestAction
 
+/* Actions */
 export type RxHttpGet = (
     path: string,
     actionTypes: RxHttpActionTypes,

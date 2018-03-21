@@ -18,6 +18,8 @@ import {
     RxHttpConfigFactory,
     RxHttpRequestActionConfigured,
     RxHttpError,
+    RxHttpAction,
+    RxHttpStartRequestAction,
 } from './interfaces'
 
 import {
@@ -32,12 +34,13 @@ import {
     RX_HTTP_SUCCESS,
     RX_HTTP_ERROR,
     RX_HTTP_FINALLY,
+    rxHttpStartRequest,
 } from './actions'
 
 import { rxHttpFetch } from './utils'
 
 const httpRequest = (
-    action$: any,
+    action$: ActionsObservable<RxHttpAction>,
     { request, actionTypes, key, args }: RxHttpRequestActionConfigured,
     dependencies: RxHttpDependencies,
 ) =>
@@ -57,10 +60,10 @@ const httpRequest = (
         ])
 
 export const createHttpRequestEpic = <T>(config: RxHttpConfigFactory<T>) => (
-    action$: ActionsObservable<RxHttpRequestAction>,
+    action$: ActionsObservable<RxHttpAction>,
     store: Store<T>,
     dependencies: RxHttpDependencies,
-): Observable<any> =>
+): Observable<RxHttpAction> =>
     action$
         .ofType(RX_HTTP_REQUEST)
         .mergeMap((action: RxHttpRequestAction) =>
@@ -76,13 +79,8 @@ export const createHttpRequestEpic = <T>(config: RxHttpConfigFactory<T>) => (
 
 export const startRequestEpic = (
     action$: ActionsObservable<RxHttpRequestAction>,
-): Observable<any> =>
-    action$
-        .ofType(RX_HTTP_REQUEST)
-        .map(({ actionTypes, args }: RxHttpRequestAction) => ({
-            type: actionTypes.REQUEST,
-            args,
-        }))
+): Observable<RxHttpStartRequestAction> =>
+    action$.ofType(RX_HTTP_REQUEST).map(rxHttpStartRequest)
 
 export const createRxHttpEpic = <T>(config: RxHttpConfigFactory<T>) =>
     combineEpics(createHttpRequestEpic<T>(config), startRequestEpic)
