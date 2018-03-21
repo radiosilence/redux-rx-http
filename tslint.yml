@@ -1,0 +1,63 @@
+---
+env:
+  browser: false
+  mocha: true
+  node: true
+extends:
+- tslint:latest
+- tslint-config-prettier
+rulesDirectory:
+- tslint-plugin-prettier
+globals:
+  React: true
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+rules:
+  prettier: true
+  array-type:
+  - true
+  - array
+  arrow-return-shorthand:
+  - true
+  - multiline
+  class-name: true
+  comment-format: true
+  curly:
+  - true
+  - ignore-same-line
+  eofline: false
+  interface-name:
+  - true
+  - never-prefix
+  jsx-alignment: false
+  jsx-boolean-value: false
+  jsx-no-multiline-js: false
+  jsx-wrap-multiline: false
+  no-submodule-imports: false
+  max-classes-per-file:
+  - false
+  no-conditional-assignment: true
+  no-console:
+  - false
+  no-duplicate-variable: true
+  no-empty: false
+  no-empty-interface: false
+  no-invalid-template-strings: true
+  no-namespace: false
+  no-shadowed-variable: true
+  no-string-literal: true
+  no-unused-variable: true
+  no-use-before-declare: true
+  no-var-keyword: true
+  no-var-requires: false
+  object-literal-shorthand: true
+  object-literal-sort-keys: false
+  only-arrow-functions:
+  - false
+  ordered-imports:
+  - false
+  prefer-template: true
+  triple-equals:
+  - true
+  variable-name: true

@@ -1,6 +1,12 @@
 src
 __tests__
 node_modules
-webpack.config.js
-tslint.json
-tsconfig.json
+*.config.js*
+ts*.*
+.*config
+.*ignore
+.prettierrc*
+demo*
+README*
+.circleci
+.vscode
