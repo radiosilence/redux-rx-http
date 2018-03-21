@@ -9,7 +9,7 @@ are passed in with the initial action in a clean, consistent way. Oh, and we hav
 
 > **Important note:** As of version 0.14, fetch is used internally. This means you will have to inject fetch as a dependency
 in your `createEpicMiddleware` function, e.g. *isomorphic-fetch*. Also, cancellation won't actually cancel the original
-request, it will just terminate the inner stream (so no further actions will be emitted). 
+request, it will just terminate the inner stream (so no further actions will be emitted).
 
 ## Configuration
 
@@ -27,28 +27,21 @@ For instance, say your authorisation token was acquired asyncronously and put in
 import { createRxHttpEpic, RxHttpRequestBase } from 'redux-rx-http'
 
 const rxHttpEpic = createRxHttpEpic((state: AppState): RxHttpRequestBase => ({
-  baseUrl: 'https://my-excellent-api.com/v1.0',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': state.auth.token, // Here we're dynamically configuring the auth token
-  },
+    baseUrl: 'https://my-excellent-api.com/v1.0',
+    headers: {
+        'Content-Type': 'application/json',
+        // Here we're dynamically configuring the auth token
+        Authorization: getAuthToken(state),
+    },
 }))
 
 const epicMiddleware = createEpicMiddleware(
-  combineEpics(
-    rootEpic,
-    rxHttpEpic,
-  ),
-  // Inject our fetch dependency (at least)
-  { dependencies: { fetch } },
+    combineEpics(rootEpic, rxHttpEpic),
+    // Inject our fetch dependency (at least)
+    { dependencies: { fetch } },
 )
 
-const store = createStore(
-  rootReducer,
-  applyMiddleware(
-    epicMiddleware,
-  ),
-)
+const store = createStore(rootReducer, applyMiddleware(epicMiddleware))
 ```
 
 ## Usage
@@ -64,7 +57,7 @@ const FETCH_POTATO = createRxHttpActionTypes('FETCH_POTATO')
 
 // Action to fetch a potat from our API
 export const fetchPotato = (id: string): RxHttpRequestAction =>
-  rxHttpGet(`/potato/${id}`)
+    rxHttpGet(`/potato/${id}`)
 ```
 
 **`epics.ts`**
