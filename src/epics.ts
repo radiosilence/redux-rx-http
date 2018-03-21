@@ -20,6 +20,7 @@ import {
     RxHttpError,
     RxHttpAction,
     RxHttpStartRequestAction,
+    RxHttpFinallyAction,
 } from './interfaces'
 
 import {
