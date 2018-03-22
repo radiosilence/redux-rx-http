@@ -88,8 +88,16 @@ export interface RxHttpActionTypes {
     FINALLY: string
 }
 
+export type QueryStringable =
+    | string
+    | number
+    | boolean
+    | object
+    | undefined
+    | null
+
 export interface RxHttpQueryParams {
-    [key: string]: string
+    [key: string]: QueryStringable | QueryStringable[]
 }
 
 export interface RxHttpRequestConfig {
