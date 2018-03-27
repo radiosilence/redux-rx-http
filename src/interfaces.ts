@@ -6,6 +6,10 @@ import {
     RX_HTTP_REQUEST,
 } from './actions'
 
+export interface Index<T = any> {
+    [key: string]: T
+}
+
 export type RxHttpRequestMode = 'cors' | 'no-cors' | 'same-origin' | 'navigate'
 
 export type RxHttpRequestCache =
@@ -20,7 +24,7 @@ export interface HeadersPayload {
 }
 export type RxHttpConfigFactory<T> = (state: T | null) => RxHttpRequestBase
 
-export type RxHttpArgs = object | undefined
+export type RxHttpArgs = Index | undefined
 
 export interface RxHttpStartRequestAction {
     type: string
@@ -35,7 +39,7 @@ export interface RxHttpGlobalSuccessAction {
 
 export interface RxHttpError {
     response: Response
-    body: string | object
+    body: string | Index
 }
 
 export interface RxHttpSuccessAction<T = any> {
@@ -47,7 +51,7 @@ export interface RxHttpSuccessAction<T = any> {
 
 export interface RxHttpErrorAction {
     type: string
-    error: string | object
+    error: string | Index
     response: Response
     args?: RxHttpArgs
 }
