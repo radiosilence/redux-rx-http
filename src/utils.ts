@@ -1,3 +1,4 @@
+import { keyBy } from 'lodash'
 import { stringify } from 'qs'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/from'
@@ -14,13 +15,23 @@ import {
 const makeAction = (base: string, action: string) =>
     `@@rx-http/${`${base}_${action}`.toUpperCase()}`
 
-export const createRxHttpActionTypes = (base: string): RxHttpActionTypes => ({
-    ERROR: makeAction(base, 'ERROR'),
-    REQUEST: makeAction(base, 'REQUEST'),
-    SUCCESS: makeAction(base, 'SUCCESS'),
-    CANCEL: makeAction(base, 'CANCEL'),
-    FINALLY: makeAction(base, 'FINALLY'),
-})
+export const createRxHttpActionTypes = (
+    base: string,
+    actions: (keyof RxHttpActionTypes)[] = [
+        'ERROR',
+        'REQUEST',
+        'SUCCESS',
+        'CANCEL',
+        'FINALLY',
+    ],
+): RxHttpActionTypes =>
+    actions.reduce(
+        (acc: any, action: string) => ({
+            ...acc,
+            [action]: makeAction(base, action),
+        }),
+        {},
+    )
 
 export const JSON_PARSE_ERROR = 'Error parsing JSON'
 

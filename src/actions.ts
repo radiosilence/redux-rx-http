@@ -44,6 +44,12 @@ export const rxHttpRequestConfigured = (
     type: RX_HTTP_REQUEST,
     request: {
         json: true,
+        actions: [
+            RX_HTTP_REQUEST,
+            RX_HTTP_SUCCESS,
+            RX_HTTP_ERROR,
+            RX_HTTP_FINALLY,
+        ],
         ...config,
         ...action.request,
         url: `${action.request.baseUrl || config.baseUrl}${action.request.url}`,

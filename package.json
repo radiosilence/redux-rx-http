@@ -7,6 +7,19 @@
   "repository": "git@github.com:radiosilence/redux-rx-http.git",
   "author": "James Cleveland",
   "license": "MIT",
+  "scripts": {
+    "start": "yarn dev:build",
+    "dev:build": "webpack -w",
+    "dev:serve": "lite-server -c server.config.json",
+    "tsc:compile": "rm -rf dist; tsc",
+    "tsc:watch": "tsc --watch --pretty",
+    "lint": "tslint ./src/**/*.{ts,tsx}",
+    "lint:fix": "tslint --fix ./src/**/*.{ts,tsx}",
+    "prepublishOnly": "yarn && yarn test && yarn tsc:compile",
+    "test": "jest",
+    "coverage": "jest --no-cache --coverage",
+    "prettier": "prettier --write './src/**/*.ts*'"
+  },
   "devDependencies": {
     "@types/fetch-mock": "6.0.0",
     "@types/jest": "22.2.0",
@@ -41,18 +54,5 @@
     "redux": "3.7.2",
     "redux-observable": "0.18.0",
     "rxjs": "5.5.9"
-  },
-  "scripts": {
-    "start": "npm run dev:build",
-    "dev:build": "webpack -w",
-    "dev:serve": "lite-server -c server.config.json",
-    "tsc:compile": "rm -rf dist; tsc",
-    "tsc:watch": "tsc --watch --pretty",
-    "lint": "tslint ./src/**/*.{ts,tsx}",
-    "lint:fix": "tslint --fix ./src/**/*.{ts,tsx}",
-    "prepublishOnly": "npm i && npm test && npm run tsc:compile",
-    "test": "jest",
-    "coverage": "jest --no-cache --coverage",
-    "prettier": "prettier --write './src/**/*.ts*'"
   }
 }

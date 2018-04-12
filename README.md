@@ -152,3 +152,33 @@ Because we're using observables, requests can be cancelled!
 // Action to cancel said fetching
 export const cancelFetchPotato = () => ({ type: FETCH_POTATO.CANCEL })
 ```
+
+
+## Filtering output actions
+
+If for some utterly bizarre reason the amount of actions going through the redux
+store is a performance issue, you can filter both global and your local actions.
+
+### Global actions
+
+Only generate success action:
+
+```typescript
+rxHttpGet('https://potato.com/api', myActions, {}, {
+  request: {
+    actions: [RX_HTTP_SUCCESS],
+  }
+})
+```
+
+This can be added to base request config, as with anything else
+
+### Specific actions
+
+Only generate success action:
+
+```typescript
+const myActions = createRxHttpActions('MY', ['SUCCESS'])
+```
+
+Simple!

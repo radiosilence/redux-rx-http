@@ -1,11 +1,18 @@
 /* tslint:disable:no-implicit-dependencies */
+import { find } from 'lodash'
 import 'rxjs/add/operator/toArray'
 import { createEpicMiddleware, ActionsObservable } from 'redux-observable'
 import * as fetchMock from 'fetch-mock'
 
 import { createHttpRequestEpic, startRequestEpic } from '../src/epics'
 
-import { rxHttpGet, rxHttpPost, rxHttpDelete, rxHttpPut } from '../src/actions'
+import {
+    rxHttpGet,
+    rxHttpPost,
+    rxHttpDelete,
+    rxHttpPut,
+    RX_HTTP_ERROR,
+} from '../src/actions'
 
 import { createRxHttpActionTypes, JSON_PARSE_ERROR } from '../src/utils'
 import { RxHttpErrorAction, RxHttpSuccessAction } from '../src/interfaces'
@@ -72,9 +79,11 @@ describe('httpRequestEpic', () => {
         httpRequestEpic(action$, null, { fetch })
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
-                expect(actualOutputActions[1]).toMatchObject(
-                    expectedOutputAction,
+                const successAction: RxHttpErrorAction = find(
+                    actualOutputActions,
+                    (action) => action.type === ACTION_TYPES.SUCCESS,
                 )
+                expect(successAction).toMatchObject(expectedOutputAction)
                 done()
             })
     })
@@ -90,9 +99,11 @@ describe('httpRequestEpic', () => {
         httpRequestEpic(action$, null, { fetch })
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
-                expect(actualOutputActions[0]).toMatchObject(
-                    expectedOutputAction,
+                const successAction: RxHttpErrorAction = find(
+                    actualOutputActions,
+                    (action) => action.type === '@@rx-http/SUCCESS',
                 )
+                expect(successAction).toMatchObject(expectedOutputAction)
                 done()
             })
     })
@@ -105,7 +116,10 @@ describe('httpRequestEpic', () => {
         httpRequestEpic(action$, null, { fetch })
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
-                const errorAction: RxHttpErrorAction = actualOutputActions[1]
+                const errorAction: RxHttpErrorAction = find(
+                    actualOutputActions,
+                    (action) => action.type === ACTION_TYPES.ERROR,
+                )
                 expect(errorAction.response.status).toEqual(404)
                 done()
             })
@@ -123,9 +137,11 @@ describe('httpRequestEpic', () => {
         httpRequestEpic(action$, null, { fetch })
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
-                expect(actualOutputActions[0]).toMatchObject(
-                    expectedOutputAction,
+                const errorAction: RxHttpErrorAction = find(
+                    actualOutputActions,
+                    (action) => action.type === '@@rx-http/ERROR',
                 )
+                expect(errorAction).toMatchObject(expectedOutputAction)
                 done()
             })
     })
@@ -138,7 +154,11 @@ describe('httpRequestEpic', () => {
         httpRequestEpic(action$, null, { fetch })
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
-                const errorAction: RxHttpErrorAction = actualOutputActions[1]
+                console.log('actualOutputActions', actualOutputActions)
+                const errorAction: RxHttpErrorAction = find(
+                    actualOutputActions,
+                    (action) => action.type === ACTION_TYPES.ERROR,
+                )
                 expect(errorAction.error).toEqual(JSON_PARSE_ERROR)
                 done()
             })
@@ -150,7 +170,10 @@ describe('httpRequestEpic', () => {
         httpRequestEpic(action$, null, { fetch })
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
-                const errorAction: RxHttpErrorAction = actualOutputActions[1]
+                const errorAction: RxHttpErrorAction = find(
+                    actualOutputActions,
+                    (action) => action.type === ACTION_TYPES.ERROR,
+                )
                 expect(errorAction.response.status).toEqual(500)
                 done()
             })
@@ -170,11 +193,11 @@ describe('httpRequestEpic', () => {
         httpRequestEpic(action$, null, { fetch })
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
-                const successAction: RxHttpSuccessAction =
-                    actualOutputActions[1]
-                expect(actualOutputActions[1]).toMatchObject(
-                    expectedOutputAction,
+                const successAction: RxHttpErrorAction = find(
+                    actualOutputActions,
+                    (action) => action.type === ACTION_TYPES.SUCCESS,
                 )
+                expect(successAction).toMatchObject(expectedOutputAction)
                 expect(successAction.response.status).toEqual(200)
                 done()
             })
@@ -192,11 +215,11 @@ describe('httpRequestEpic', () => {
         httpRequestEpic(action$, null, { fetch })
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
-                const successAction: RxHttpSuccessAction =
-                    actualOutputActions[1]
-                expect(actualOutputActions[1]).toMatchObject(
-                    expectedOutputAction,
+                const successAction: RxHttpErrorAction = find(
+                    actualOutputActions,
+                    (action) => action.type === ACTION_TYPES.SUCCESS,
                 )
+                expect(successAction).toMatchObject(expectedOutputAction)
                 expect(successAction.response.status).toEqual(200)
                 done()
             })
@@ -217,12 +240,70 @@ describe('httpRequestEpic', () => {
         httpRequestEpic(action$, null, { fetch })
             .toArray()
             .subscribe((actualOutputActions: any[]) => {
-                const successAction: RxHttpSuccessAction =
-                    actualOutputActions[1]
-                expect(actualOutputActions[1]).toMatchObject(
-                    expectedOutputAction,
+                const successAction: RxHttpErrorAction = find(
+                    actualOutputActions,
+                    (action) => action.type === ACTION_TYPES.SUCCESS,
                 )
+                expect(successAction).toMatchObject(expectedOutputAction)
                 expect(successAction.response.status).toEqual(200)
+                done()
+            })
+    })
+
+    it('should get a response success but with no actions', (done) => {
+        const action$ = ActionsObservable.of(
+            rxHttpGet(
+                '/potatoes',
+                createRxHttpActionTypes('TEST', []),
+                {},
+                {
+                    request: {
+                        actions: [],
+                    },
+                },
+            ),
+        )
+
+        httpRequestEpic(action$, null, { fetch })
+            .toArray()
+            .subscribe((actualOutputActions: any[]) => {
+                console.log('ACTUAL OUTPUT ACTIONS', actualOutputActions)
+                expect(actualOutputActions.length).toBe(0)
+                done()
+            })
+    })
+
+    it('should get a response success but with no global actions', (done) => {
+        const action$ = ActionsObservable.of(
+            rxHttpGet(
+                '/potatoes',
+                createRxHttpActionTypes('TEST'),
+                {},
+                {
+                    request: {
+                        actions: [],
+                    },
+                },
+            ),
+        )
+
+        httpRequestEpic(action$, null, { fetch })
+            .toArray()
+            .subscribe((actualOutputActions: any[]) => {
+                expect(actualOutputActions.length).toBe(2)
+                done()
+            })
+    })
+
+    it('should get a response success but with no local actions', (done) => {
+        const action$ = ActionsObservable.of(
+            rxHttpGet('/potatoes', createRxHttpActionTypes('TEST', [])),
+        )
+
+        httpRequestEpic(action$, null, { fetch })
+            .toArray()
+            .subscribe((actualOutputActions: any[]) => {
+                expect(actualOutputActions.length).toBe(2)
                 done()
             })
     })

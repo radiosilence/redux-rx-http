@@ -23,4 +23,13 @@ describe('createRxHttpActionTypes', () => {
             desiredActionTypes,
         )
     })
+
+    it('should create custom action types', () => {
+        expect(
+            createRxHttpActionTypes('test', ['ERROR', 'SUCCESS']),
+        ).toMatchObject({
+            ERROR: '@@rx-http/TEST_ERROR',
+            SUCCESS: '@@rx-http/TEST_SUCCESS',
+        })
+    })
 })

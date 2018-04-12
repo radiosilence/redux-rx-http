@@ -80,6 +80,12 @@ export interface RxHttpRequestAction {
     args?: RxHttpArgs
 }
 
+export type RxHttpGlobalActionTypes =
+    | typeof RX_HTTP_SUCCESS
+    | typeof RX_HTTP_ERROR
+    | typeof RX_HTTP_REQUEST
+    | typeof RX_HTTP_FINALLY
+
 export interface RxHttpRequestActionConfigured extends RxHttpRequestAction {
     request: RxHttpRequestConfigured
 }
@@ -119,6 +125,7 @@ export interface RxHttpRequestBase {
     cache?: RxHttpRequestCache
     baseUrl?: string
     json?: boolean
+    actions?: RxHttpGlobalActionTypes[]
 }
 
 export interface RxHttpRequest extends RxHttpRequestBase {
@@ -129,6 +136,7 @@ export interface RxHttpRequest extends RxHttpRequestBase {
 
 export interface RxHttpRequestConfigured extends RxHttpRequest {
     json: boolean
+    actions: RxHttpGlobalActionTypes[]
 }
 
 export interface RxHttpResponse {
