@@ -12,11 +12,7 @@ import {
 } from 'redux-observable'
 
 import { createRxHttpEpic } from './epics'
-import {
-    RxHttpSuccessAction,
-    RxHttpGlobalSuccessAction,
-    RxHttpAction,
-} from 'interfaces'
+import { RxHttpGlobalSuccessAction } from './interfaces'
 
 const POTATO = createRxHttpActionTypes('POTATO')
 
