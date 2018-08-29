@@ -1,7 +1,6 @@
 import { keyBy } from 'lodash'
 import { stringify } from 'qs'
-import { Observable } from 'rxjs/Observable'
-import 'rxjs/add/observable/from'
+import { Observable, from } from 'rxjs'
 
 import {
     RxHttpActionTypes,
@@ -54,7 +53,7 @@ export const rxHttpFetch = (
     rxHttpRequest: RxHttpRequestConfigured,
     { fetch }: RxHttpDependencies,
 ): Observable<RxHttpResponse> =>
-    Observable.from(
+    from(
         (async (): Promise<RxHttpResponse> => {
             try {
                 const {
@@ -92,7 +91,7 @@ export const rxHttpFetch = (
                     }
                     throw error
                 }
-
+                console.log('returning response', { response, data })
                 return {
                     response,
                     data,

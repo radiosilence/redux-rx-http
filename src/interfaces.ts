@@ -1,4 +1,3 @@
-import { AjaxResponse } from 'rxjs'
 import {
     RX_HTTP_SUCCESS,
     RX_HTTP_ERROR,

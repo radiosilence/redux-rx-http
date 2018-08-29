@@ -1,19 +1,18 @@
 import { Store } from 'redux'
 import { includes, values } from 'lodash'
 
-import 'rxjs/add/operator/mergeMap'
-import 'rxjs/add/operator/takeUntil'
-import 'rxjs/add/operator/catch'
-import 'rxjs/add/operator/mapTo'
-import 'rxjs/add/operator/map'
-
-import { ActionsObservable, combineEpics, Epic } from 'redux-observable'
-import { Observable } from 'rxjs/Observable'
+import {
+    ActionsObservable,
+    combineEpics,
+    ofType,
+    StateObservable,
+} from 'redux-observable'
+import { Observable } from 'rxjs'
+import { map, mergeMap, takeUntil, catchError } from 'rxjs/operators'
 
 import {
     RxHttpRequestAction,
     RxHttpActionTypes,
-    RxHttpRequest,
     RxHttpResponse,
     RxHttpDependencies,
     RxHttpConfigFactory,
@@ -33,9 +32,6 @@ import {
     rxHttpFinally,
     rxHttpGlobalFinally,
     RX_HTTP_REQUEST,
-    RX_HTTP_SUCCESS,
-    RX_HTTP_ERROR,
-    RX_HTTP_FINALLY,
     rxHttpStartRequest,
 } from './actions'
 
@@ -52,47 +48,48 @@ const httpRequest = (
     { request, actionTypes, key, args }: RxHttpRequestActionConfigured,
     dependencies: RxHttpDependencies,
 ) =>
-    rxHttpFetch(request, dependencies)
-        .mergeMap((response: RxHttpResponse) =>
+    rxHttpFetch(request, dependencies).pipe(
+        mergeMap((response: RxHttpResponse) =>
             [
                 rxHttpGlobalSuccess(response, key, args),
                 rxHttpSuccess(response, key, args, actionTypes),
                 rxHttpGlobalFinally(args),
                 rxHttpFinally(args, actionTypes),
             ].filter(filterActions(request, actionTypes)),
-        )
-        .takeUntil(action$.ofType(actionTypes.CANCEL))
-        .catch((error: RxHttpError) =>
+        ),
+        takeUntil(action$.ofType(actionTypes.CANCEL)),
+        catchError((error: RxHttpError) =>
             [
                 rxHttpGlobalError(error, args),
                 rxHttpError(error, args, actionTypes),
                 rxHttpGlobalFinally(args),
                 rxHttpFinally(args, actionTypes),
             ].filter(filterActions(request, actionTypes)),
-        )
+        ),
+    )
 
 export const createHttpRequestEpic = <T>(config: RxHttpConfigFactory<T>) => (
     action$: ActionsObservable<RxHttpAction>,
-    store: Store<T>,
+    state$: StateObservable<T>,
     dependencies: RxHttpDependencies,
 ): Observable<RxHttpAction> =>
-    action$
-        .ofType(RX_HTTP_REQUEST)
-        .mergeMap((action: RxHttpRequestAction) =>
-            httpRequest(
+    action$.pipe(
+        ofType(RX_HTTP_REQUEST),
+        mergeMap((action: RxHttpRequestAction) => {
+            const req = httpRequest(
                 action$,
-                rxHttpRequestConfigured(
-                    config(store ? store.getState() : null),
-                    action,
-                ),
+                rxHttpRequestConfigured(config(state$.value), action),
                 dependencies,
-            ),
-        )
+            )
+            console.log('req is', req)
+            return req
+        }),
+    )
 
 export const startRequestEpic = (
     action$: ActionsObservable<RxHttpRequestAction>,
 ): Observable<RxHttpStartRequestAction> =>
-    action$.ofType(RX_HTTP_REQUEST).map(rxHttpStartRequest)
+    action$.pipe(ofType(RX_HTTP_REQUEST), map(rxHttpStartRequest))
 
 export const createRxHttpEpic = <T>(config: RxHttpConfigFactory<T>) =>
     combineEpics(createHttpRequestEpic<T>(config), startRequestEpic)

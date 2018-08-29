@@ -1,5 +1,5 @@
-/* tslint:disable:no-implicit-dependencies */
 import { createStore, applyMiddleware, compose } from 'redux'
+import { map } from 'rxjs/operators'
 import thunk from 'redux-thunk'
 import { rxHttpGet, rxHttpPost, RX_HTTP_SUCCESS } from './actions'
 import { createRxHttpActionTypes } from './utils'
@@ -8,35 +8,40 @@ import {
     createEpicMiddleware,
     combineEpics,
     ActionsObservable,
+    ofType,
 } from 'redux-observable'
 
 import { createRxHttpEpic } from './epics'
-import { Fetch } from './interfaces'
-/* tslint:enable:no-implicit-dependencies */
+import { RxHttpSuccessAction, RxHttpGlobalSuccessAction } from 'interfaces'
 
 const POTATO = createRxHttpActionTypes('POTATO')
 
-interface RootState {}
+interface RootState {
+    exampleVal: number
+}
 
-const rootReducer = (state: RootState = {}, action: any) => state
+const rootReducer = (
+    state: RootState = {
+        exampleVal: 1,
+    },
+    action: any,
+) => state
 
-const rxHttpEpic = createRxHttpEpic(() => ({
+const rxHttpEpic = createRxHttpEpic((state: RootState) => ({
     baseUrl: 'http://localhost:3030',
     json: true,
 }))
 
-const resultEpic = (action$: ActionsObservable<any>): any =>
-    action$
-        .ofType(RX_HTTP_SUCCESS)
-        .map(
-            (result) =>
-                (resultNode.innerHTML = JSON.stringify(result.response.data)),
-        )
+const resultEpic = (action$: ActionsObservable<RxHttpGlobalSuccessAction>) =>
+    action$.pipe(
+        ofType(RX_HTTP_SUCCESS),
+        map((result) => {
+            resultNode.innerHTML = JSON.stringify(result.response.data)
+            return { type: 'NOOP' }
+        }),
+    )
 
-const epicMiddleware = createEpicMiddleware(
-    combineEpics(rxHttpEpic, resultEpic),
-    { dependencies: { fetch } },
-)
+const epicMiddleware = createEpicMiddleware({ dependencies: { fetch } })
 
 const composeEnhancers =
     (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
@@ -45,6 +50,8 @@ const store = createStore(
     rootReducer,
     composeEnhancers(applyMiddleware(thunk, epicMiddleware)),
 )
+
+epicMiddleware.run(combineEpics(rxHttpEpic, resultEpic))
 
 const createButton = (name: string, cb: () => any) => {
     const node = document.createElement('button')

@@ -10,7 +10,7 @@ app.use(morgan('tiny'))
 app.use(cors())
 
 app.get('/', (req, res) => {
-  res.send({ status: 'ok' })
+  res.send({ status: 'ok!' })
 })
 
 app.post('/', (req, res) => {
