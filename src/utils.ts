@@ -91,7 +91,6 @@ export const rxHttpFetch = (
                     }
                     throw error
                 }
-                console.log('returning response', { response, data })
                 return {
                     response,
                     data,
