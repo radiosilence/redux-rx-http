@@ -21,7 +21,7 @@ export type RxHttpRequestCache =
 export interface HeadersPayload {
     [key: string]: string
 }
-export type RxHttpConfigFactory<T> = (state: T | null) => RxHttpRequestBase
+export type RxHttpConfigFactory<T> = (state: T | void) => RxHttpRequestBase
 
 export type RxHttpArgs = Index | undefined
 

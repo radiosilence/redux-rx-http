@@ -70,7 +70,7 @@ const httpRequest = (
 
 export const createHttpRequestEpic = <T>(config: RxHttpConfigFactory<T>) => (
     action$: ActionsObservable<RxHttpAction>,
-    state$: StateObservable<T>,
+    state$: StateObservable<T | void>,
     dependencies: RxHttpDependencies,
 ) =>
     action$.pipe(
@@ -79,7 +79,7 @@ export const createHttpRequestEpic = <T>(config: RxHttpConfigFactory<T>) => (
             httpRequest(
                 action$,
                 rxHttpRequestConfigured(
-                    config(state$ ? state$.value : null),
+                    config(state$ ? state$.value : undefined),
                     action,
                 ),
                 dependencies,

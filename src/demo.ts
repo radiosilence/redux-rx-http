@@ -12,7 +12,11 @@ import {
 } from 'redux-observable'
 
 import { createRxHttpEpic } from './epics'
-import { RxHttpSuccessAction, RxHttpGlobalSuccessAction } from 'interfaces'
+import {
+    RxHttpSuccessAction,
+    RxHttpGlobalSuccessAction,
+    RxHttpAction,
+} from 'interfaces'
 
 const POTATO = createRxHttpActionTypes('POTATO')
 
@@ -51,7 +55,7 @@ const store = createStore(
     composeEnhancers(applyMiddleware(thunk, epicMiddleware)),
 )
 
-epicMiddleware.run(combineEpics(rxHttpEpic, resultEpic))
+epicMiddleware.run(combineEpics(rxHttpEpic))
 
 const createButton = (name: string, cb: () => any) => {
     const node = document.createElement('button')
