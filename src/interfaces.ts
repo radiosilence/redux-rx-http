@@ -1,18 +1,16 @@
+import { Dictionary } from 'lodash'
+
 import {
     RX_HTTP_REQUEST,
     RX_HTTP_SUCCESS,
     RX_HTTP_ERROR,
     RX_HTTP_FINALLY,
-} from './actions'
+} from './constants'
 
 export type RxHttpSuccessGlobalActionType = typeof RX_HTTP_SUCCESS
 export type RxHttpErrorGlobalActionType = typeof RX_HTTP_ERROR
 export type RxHttpRequestGlobalActionType = typeof RX_HTTP_REQUEST
 export type RxHttpFinallyGlobalActionType = typeof RX_HTTP_FINALLY
-
-export interface Index<T = any> {
-    [key: string]: T
-}
 
 export type RxHttpRequestMode = 'cors' | 'no-cors' | 'same-origin' | 'navigate'
 
@@ -28,7 +26,7 @@ export interface HeadersPayload {
 }
 export type RxHttpConfigFactory<T> = (state?: T | void) => RxHttpRequestBase
 
-export type RxHttpArgs = Index | undefined
+export type RxHttpArgs<T = any> = Dictionary<T> | undefined
 
 export interface RxHttpStartRequestAction {
     type: string
@@ -43,7 +41,7 @@ export interface RxHttpGlobalSuccessAction {
 
 export interface RxHttpError {
     response: Response
-    body: string | Index
+    body: string | Dictionary<any>
 }
 
 export interface RxHttpSuccessAction<T = any> {
@@ -55,7 +53,7 @@ export interface RxHttpSuccessAction<T = any> {
 
 export interface RxHttpErrorAction {
     type: string
-    error: string | Index
+    error: string | Dictionary<any>
     response: Response
     args?: RxHttpArgs
 }

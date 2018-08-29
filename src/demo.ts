@@ -2,7 +2,8 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import { map } from 'rxjs/operators'
 import thunk from 'redux-thunk'
 import { RxHttpGlobalSuccessAction } from './interfaces'
-import { RX_HTTP_SUCCESS, rxHttpGet, rxHttpPost } from './actions'
+import { rxHttpGet, rxHttpPost } from './actions'
+import { RX_HTTP_SUCCESS } from './constants'
 import { createRxHttpActionTypes } from './utils'
 
 import {

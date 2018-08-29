@@ -1,4 +1,10 @@
 import * as A from '../src/actions'
+import {
+    RX_HTTP_ERROR,
+    RX_HTTP_FINALLY,
+    RX_HTTP_REQUEST,
+    RX_HTTP_SUCCESS,
+} from '../src/constants'
 import { createRxHttpActionTypes } from '../src/utils'
 
 const URL = 'https://example.com'
@@ -8,7 +14,7 @@ describe('rxHttpGet', () => {
     it('should return a get action', () => {
         const action = A.rxHttpGet(URL, ACTION_TYPES)
         expect(action).toMatchObject({
-            type: A.RX_HTTP_REQUEST,
+            type: RX_HTTP_REQUEST,
             actionTypes: ACTION_TYPES,
             request: {
                 url: URL,
@@ -19,7 +25,7 @@ describe('rxHttpGet', () => {
     it('should return a get action with querystring', () => {
         const action = A.rxHttpGet(URL, ACTION_TYPES, { hi: 'ho' })
         expect(action).toMatchObject({
-            type: A.RX_HTTP_REQUEST,
+            type: RX_HTTP_REQUEST,
             actionTypes: ACTION_TYPES,
             request: {
                 url: URL,
@@ -34,7 +40,7 @@ describe('rxHttpPost', () => {
     it('should return a post action', () => {
         const action = A.rxHttpPost(URL, ACTION_TYPES)
         expect(action).toMatchObject({
-            type: A.RX_HTTP_REQUEST,
+            type: RX_HTTP_REQUEST,
             actionTypes: ACTION_TYPES,
             request: {
                 url: URL,
@@ -46,7 +52,7 @@ describe('rxHttpPost', () => {
     it('should return a post action with body', () => {
         const action = A.rxHttpPost(URL, ACTION_TYPES, { potato: 'tomato' })
         expect(action).toMatchObject({
-            type: A.RX_HTTP_REQUEST,
+            type: RX_HTTP_REQUEST,
             actionTypes: ACTION_TYPES,
             request: {
                 url: URL,
@@ -61,7 +67,7 @@ describe('rxHttpPut', () => {
     it('should return a put action', () => {
         const action = A.rxHttpPut(URL, ACTION_TYPES)
         expect(action).toMatchObject({
-            type: A.RX_HTTP_REQUEST,
+            type: RX_HTTP_REQUEST,
             actionTypes: ACTION_TYPES,
             request: {
                 url: URL,
@@ -73,7 +79,7 @@ describe('rxHttpPut', () => {
     it('should return a put action with body', () => {
         const action = A.rxHttpPut(URL, ACTION_TYPES, { potato: 'tomato' })
         expect(action).toMatchObject({
-            type: A.RX_HTTP_REQUEST,
+            type: RX_HTTP_REQUEST,
             actionTypes: ACTION_TYPES,
             request: {
                 url: URL,
@@ -88,7 +94,7 @@ describe('rxHttpDelete', () => {
     it('should return a delete action', () => {
         const action = A.rxHttpDelete(URL, ACTION_TYPES)
         expect(action).toMatchObject({
-            type: A.RX_HTTP_REQUEST,
+            type: RX_HTTP_REQUEST,
             actionTypes: ACTION_TYPES,
             request: {
                 url: URL,
@@ -102,7 +108,7 @@ describe('rxHttpHead', () => {
     it('should return a head action', () => {
         const action = A.rxHttpHead(URL, ACTION_TYPES)
         expect(action).toMatchObject({
-            type: A.RX_HTTP_REQUEST,
+            type: RX_HTTP_REQUEST,
             actionTypes: ACTION_TYPES,
             request: {
                 url: URL,
@@ -116,7 +122,7 @@ describe('rxHttpPatch', () => {
     it('should return a patch action', () => {
         const action = A.rxHttpPatch(URL, ACTION_TYPES)
         expect(action).toMatchObject({
-            type: A.RX_HTTP_REQUEST,
+            type: RX_HTTP_REQUEST,
             actionTypes: ACTION_TYPES,
             request: {
                 url: URL,
@@ -127,7 +133,7 @@ describe('rxHttpPatch', () => {
     it('should return a patch action with body', () => {
         const action = A.rxHttpPatch(URL, ACTION_TYPES, { hi: 'ho' })
         expect(action).toMatchObject({
-            type: A.RX_HTTP_REQUEST,
+            type: RX_HTTP_REQUEST,
             actionTypes: ACTION_TYPES,
             request: {
                 url: URL,

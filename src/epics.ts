@@ -29,8 +29,9 @@ import {
     rxHttpFinally,
     rxHttpGlobalFinally,
     rxHttpStartRequest,
-    RX_HTTP_REQUEST,
 } from './actions'
+
+import { RX_HTTP_REQUEST } from './constants'
 
 import { rxHttpFetch } from './utils'
 

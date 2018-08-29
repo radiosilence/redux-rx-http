@@ -1,4 +1,11 @@
 import {
+    RX_HTTP_REQUEST,
+    RX_HTTP_SUCCESS,
+    RX_HTTP_ERROR,
+    RX_HTTP_FINALLY,
+} from './constants'
+
+import {
     RxHttpActionTypes,
     RxHttpResponse,
     RxHttpRequest,
@@ -11,10 +18,6 @@ import {
     RxHttpGlobalActionType,
     RxHttpRequestGlobalActionType,
 } from './interfaces'
-export const RX_HTTP_REQUEST = '@@rx-http/REQUEST'
-export const RX_HTTP_SUCCESS = '@@rx-http/SUCCESS'
-export const RX_HTTP_ERROR = '@@rx-http/ERROR'
-export const RX_HTTP_FINALLY = '@@rx-http/FINALLY'
 
 const DEFAULT_GLOBAL_ACTIONS: RxHttpGlobalActionType[] = [
     RX_HTTP_REQUEST,
