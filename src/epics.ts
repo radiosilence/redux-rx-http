@@ -1,4 +1,3 @@
-import { Store } from 'redux'
 import { includes, values } from 'lodash'
 
 import {
@@ -7,7 +6,6 @@ import {
     ofType,
     StateObservable,
 } from 'redux-observable'
-import { Observable } from 'rxjs'
 import { map, mergeMap, takeUntil, catchError } from 'rxjs/operators'
 
 import {
@@ -19,7 +17,6 @@ import {
     RxHttpRequestActionConfigured,
     RxHttpError,
     RxHttpAction,
-    RxHttpStartRequestAction,
     RxHttpRequestConfigured,
 } from './interfaces'
 
@@ -31,8 +28,8 @@ import {
     rxHttpGlobalError,
     rxHttpFinally,
     rxHttpGlobalFinally,
-    RX_HTTP_REQUEST,
     rxHttpStartRequest,
+    RX_HTTP_REQUEST,
 } from './actions'
 
 import { rxHttpFetch } from './utils'
@@ -79,7 +76,7 @@ export const createHttpRequestEpic = <T>(config: RxHttpConfigFactory<T>) => (
             httpRequest(
                 action$,
                 rxHttpRequestConfigured(
-                    config(state$ ? state$.value : undefined),
+                    state$ ? config(state$.value) : config(),
                     action,
                 ),
                 dependencies,

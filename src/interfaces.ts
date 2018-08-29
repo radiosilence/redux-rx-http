@@ -1,9 +1,14 @@
 import {
+    RX_HTTP_REQUEST,
     RX_HTTP_SUCCESS,
     RX_HTTP_ERROR,
     RX_HTTP_FINALLY,
-    RX_HTTP_REQUEST,
 } from './actions'
+
+export type RxHttpSuccessGlobalActionType = typeof RX_HTTP_SUCCESS
+export type RxHttpErrorGlobalActionType = typeof RX_HTTP_ERROR
+export type RxHttpRequestGlobalActionType = typeof RX_HTTP_REQUEST
+export type RxHttpFinallyGlobalActionType = typeof RX_HTTP_FINALLY
 
 export interface Index<T = any> {
     [key: string]: T
@@ -21,7 +26,7 @@ export type RxHttpRequestCache =
 export interface HeadersPayload {
     [key: string]: string
 }
-export type RxHttpConfigFactory<T> = (state: T | void) => RxHttpRequestBase
+export type RxHttpConfigFactory<T> = (state?: T | void) => RxHttpRequestBase
 
 export type RxHttpArgs = Index | undefined
 
@@ -30,7 +35,7 @@ export interface RxHttpStartRequestAction {
     args: RxHttpArgs
 }
 export interface RxHttpGlobalSuccessAction {
-    type: typeof RX_HTTP_SUCCESS
+    type: RxHttpSuccessGlobalActionType
     response: RxHttpResponse
     key?: string
     args: RxHttpArgs
@@ -56,7 +61,7 @@ export interface RxHttpErrorAction {
 }
 
 export interface RxHttpGlobalErrorAction {
-    type: typeof RX_HTTP_ERROR
+    type: RxHttpErrorGlobalActionType
     error: RxHttpError
     args?: RxHttpArgs
 }
@@ -67,23 +72,23 @@ export interface RxHttpFinallyAction {
 }
 
 export interface RxHttpGlobalFinallyAction {
-    type: typeof RX_HTTP_FINALLY
+    type: RxHttpFinallyGlobalActionType
     args: RxHttpArgs
 }
 
 export interface RxHttpRequestAction {
-    type: typeof RX_HTTP_REQUEST
+    type: RxHttpRequestGlobalActionType
     actionTypes: RxHttpActionTypes
     request: RxHttpRequest
     key?: string
     args?: RxHttpArgs
 }
 
-export type RxHttpGlobalActionTypes =
-    | typeof RX_HTTP_SUCCESS
-    | typeof RX_HTTP_ERROR
-    | typeof RX_HTTP_REQUEST
-    | typeof RX_HTTP_FINALLY
+export type RxHttpGlobalActionType =
+    | RxHttpSuccessGlobalActionType
+    | RxHttpErrorGlobalActionType
+    | RxHttpRequestGlobalActionType
+    | RxHttpFinallyGlobalActionType
 
 export interface RxHttpRequestActionConfigured extends RxHttpRequestAction {
     request: RxHttpRequestConfigured
@@ -124,7 +129,7 @@ export interface RxHttpRequestBase {
     cache?: RxHttpRequestCache
     baseUrl?: string
     json?: boolean
-    actions?: RxHttpGlobalActionTypes[]
+    actions?: RxHttpGlobalActionType[]
 }
 
 export interface RxHttpRequest extends RxHttpRequestBase {
@@ -135,7 +140,7 @@ export interface RxHttpRequest extends RxHttpRequestBase {
 
 export interface RxHttpRequestConfigured extends RxHttpRequest {
     json: boolean
-    actions: RxHttpGlobalActionTypes[]
+    actions: RxHttpGlobalActionType[]
 }
 
 export interface RxHttpResponse {

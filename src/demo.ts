@@ -1,7 +1,8 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import { map } from 'rxjs/operators'
 import thunk from 'redux-thunk'
-import { rxHttpGet, rxHttpPost, RX_HTTP_SUCCESS } from './actions'
+import { RxHttpGlobalSuccessAction } from './interfaces'
+import { RX_HTTP_SUCCESS, rxHttpGet, rxHttpPost } from './actions'
 import { createRxHttpActionTypes } from './utils'
 
 import {
@@ -12,7 +13,6 @@ import {
 } from 'redux-observable'
 
 import { createRxHttpEpic } from './epics'
-import { RxHttpGlobalSuccessAction } from './interfaces'
 
 const POTATO = createRxHttpActionTypes('POTATO')
 
