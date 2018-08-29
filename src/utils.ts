@@ -10,6 +10,7 @@ import {
     RxHttpError,
     RxHttpRequestConfigured,
 } from './interfaces'
+import { RX_HTTP_JSON_PARSE_ERROR } from './constants'
 
 const makeAction = (base: string, action: string) =>
     `@@rx-http/${`${base}_${action}`.toUpperCase()}`
@@ -32,8 +33,6 @@ export const createRxHttpActionTypes = (
         {},
     )
 
-export const JSON_PARSE_ERROR = 'Error parsing JSON'
-
 const getJsonFromResponse = async (response: Response, json: boolean) => {
     try {
         return json ? await response.json() : response.body
@@ -41,7 +40,7 @@ const getJsonFromResponse = async (response: Response, json: boolean) => {
         if (json) {
             const error: RxHttpError = {
                 response,
-                body: JSON_PARSE_ERROR,
+                body: RX_HTTP_JSON_PARSE_ERROR,
             }
             throw error
         }

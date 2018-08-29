@@ -1,5 +1,3 @@
-import { Dictionary } from 'lodash'
-
 import {
     RX_HTTP_REQUEST,
     RX_HTTP_SUCCESS,
@@ -21,9 +19,12 @@ export type RxHttpRequestCache =
     | 'reload'
     | 'force-cache'
 
-export interface HeadersPayload {
-    [key: string]: string
+export interface Dictionary<T> {
+    [key: string]: T
 }
+
+export type HeadersPayload = Dictionary<string>
+
 export type RxHttpConfigFactory<T> = (state?: T | void) => RxHttpRequestBase
 
 export type RxHttpArgs<T = any> = Dictionary<T> | undefined

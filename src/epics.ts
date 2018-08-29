@@ -5,7 +5,9 @@ import {
     combineEpics,
     ofType,
     StateObservable,
+    Epic,
 } from 'redux-observable'
+import { Observable } from 'rxjs'
 import { map, mergeMap, takeUntil, catchError } from 'rxjs/operators'
 
 import {
@@ -18,6 +20,7 @@ import {
     RxHttpError,
     RxHttpAction,
     RxHttpRequestConfigured,
+    RxHttpStartRequestAction,
 } from './interfaces'
 
 import {
@@ -66,11 +69,13 @@ const httpRequest = (
         ),
     )
 
-export const createHttpRequestEpic = <T>(config: RxHttpConfigFactory<T>) => (
+export const createHttpRequestEpic = <T>(
+    config: RxHttpConfigFactory<T>,
+): Epic<RxHttpAction> => (
     action$: ActionsObservable<RxHttpAction>,
     state$: StateObservable<T | void>,
     dependencies: RxHttpDependencies,
-) =>
+): Observable<RxHttpAction> =>
     action$.pipe(
         ofType(RX_HTTP_REQUEST),
         mergeMap((action: RxHttpRequestAction) =>
@@ -87,7 +92,8 @@ export const createHttpRequestEpic = <T>(config: RxHttpConfigFactory<T>) => (
 
 export const startRequestEpic = (
     action$: ActionsObservable<RxHttpRequestAction>,
-) => action$.pipe(ofType(RX_HTTP_REQUEST), map(rxHttpStartRequest))
+): Observable<RxHttpStartRequestAction> =>
+    action$.pipe(ofType(RX_HTTP_REQUEST), map(rxHttpStartRequest))
 
 export const createRxHttpEpic = <T>(config: RxHttpConfigFactory<T>) =>
     combineEpics(createHttpRequestEpic<T>(config), startRequestEpic)
