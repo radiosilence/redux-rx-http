@@ -4,10 +4,10 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: "./dist/demo.js",
+  entry: {demo: "./src/demo.ts", index: "./src/index.ts"},
   output: {
-    filename: "bundle.js",
-    path: path.resolve("./bundle")
+    filename: "[name].js",
+    path: path.resolve("./dist")
   },
 
   // Enable sourcemaps for debugging webpack's output.
@@ -32,9 +32,8 @@ module.exports = {
         enforce: 'pre',
         test: /\.js$/,
         loader: "source-map-loader"
-        //loaders: ['react-hot', 'babel-loader'],
-
       },
+      { test: /\.tsx?$/, loader: "ts-loader" },
       {
         test: /\.html$/,
         loader: "handlebars"

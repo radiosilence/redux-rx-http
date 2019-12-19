@@ -16,7 +16,7 @@
             "dom"
         ],
          "types": [
-             "node",
+            "node",
             "jest"
          ],
         "typeRoots": [

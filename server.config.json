@@ -1,6 +1,6 @@
 {
   "server": {
-    "baseDir": "bundle",
+    "baseDir": "dist",
     "routes": {
       "/src": "src"
     }
