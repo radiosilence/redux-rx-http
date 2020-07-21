@@ -35,7 +35,7 @@
     "isomorphic-fetch": "2.2.1",
     "jest": "22.4.2",
     "lite-server": "^2.3.0",
-    "morgan": "1.9.0",
+    "morgan": "1.9.1",
     "prettier": "1.11.1",
     "redux-thunk": "2.2.0",
     "source-map-loader": "0.2.3",
